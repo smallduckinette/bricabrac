@@ -1,0 +1,5 @@
+#ifndef __CHAPITRE2_COLLISIONDATA_H__
+#define __CHAPITRE2_COLLISIONDATA_H__
+
+
+#endif
