@@ -2,7 +2,7 @@ CXX = g++
 CXXFLAGS = -ggdb -O3 -std=c++17 -W -Wall -Werror -ansi -pedantic
 LDFLAGS  = -lsfml-graphics -lsfml-window -lsfml-system -pthread
 
-TARGET = main
+TARGET = main.app
 SRCS   = main.cpp
 OBJS   = $(SRCS:.cpp=.o)
 DEPS   = $(SRCS:.cpp=.depends)
