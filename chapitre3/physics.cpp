@@ -29,6 +29,27 @@ CollisionDataOpt operator^(const CollisionDataOpt & left, const CollisionDataOpt
     return right;
 }
 
+bool operator==(const CollisionData & left, const CollisionData & right)
+{
+  return
+    (left._position == right._position &&
+     left._direction == right._direction &&
+     left._residualVelocity == right._residualVelocity);
+}
+
+std::ostream & operator<<(std::ostream & str, const CollisionData & data)
+{
+  str << data._position << ", " << data._direction << ", " << data._residualVelocity;
+  return str;
+}
+
+Disc::Disc(const sf::Vector2f & position,
+           float radius):
+  _position(position),
+  _radius(radius)
+{
+}
+
 Rectangle::Rectangle(const sf::Vector2f & m1,
                      const sf::Vector2f & m2):
   _min(m1),
@@ -95,7 +116,7 @@ CollisionDataOpt Rectangle::testHorizontalHit(float y,
                                               const sf::Vector2f & direction,
                                               float velocity) const
 {
-  float delta = (y - position.y) / (velocity * direction.y);
+  float delta = (y - position.y) / direction.y;
   
   if(delta >= 0 && delta <= velocity)
   {
@@ -114,7 +135,7 @@ CollisionDataOpt Rectangle::testVerticalHit(float x,
                                             const sf::Vector2f & direction,
                                             float velocity) const
 {
-  float delta = (x - position.x) / (velocity * direction.x);
+  float delta = (x - position.x) / direction.x;
   
   if(delta >= 0 && delta <= velocity)
   {

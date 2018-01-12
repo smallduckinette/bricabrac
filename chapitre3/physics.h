@@ -1,6 +1,7 @@
 #ifndef __CHAPITRE2_PHYSICS_H__
 #define __CHAPITRE2_PHYSICS_H__
 
+#include <iostream>
 #include <boost/optional.hpp>
 #include <SFML/System/Vector2.hpp>
 
@@ -11,6 +12,13 @@ namespace sf
   T operator*(const Vector2<T> & left, const Vector2<T> & right)
   {
     return left.x * left.y + right.x * right.y;
+  }
+
+  template<typename T>
+  std::ostream & operator<<(std::ostream & str, const Vector2<T> & v)
+  {
+    str << "(" << v.x << ", " << v.y << ")";
+    return str;
   }
 }
 
@@ -27,6 +35,8 @@ public:
 };
 
 bool operator<(const CollisionData & left, const CollisionData & right);
+bool operator==(const CollisionData & left, const CollisionData & right);
+std::ostream & operator<<(std::ostream & str, const CollisionData & data);
 
 typedef boost::optional<CollisionData> CollisionDataOpt;
 
@@ -35,6 +45,9 @@ CollisionDataOpt operator^(const CollisionDataOpt & left, const CollisionDataOpt
 class Disc
 {
 public:
+  Disc(const sf::Vector2f & position,
+       float radius);
+  
   sf::Vector2f _position;
   float _radius;
 };
