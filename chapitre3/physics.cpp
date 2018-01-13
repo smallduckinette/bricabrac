@@ -32,9 +32,9 @@ CollisionDataOpt operator^(const CollisionDataOpt & left, const CollisionDataOpt
 bool operator==(const CollisionData & left, const CollisionData & right)
 {
   return
-    (left._position == right._position &&
-     left._direction == right._direction &&
-     left._residualVelocity == right._residualVelocity);
+    sf::close(left._position, right._position, 0.01f) &&
+    sf::close(left._direction, right._direction, 0.01f) &&
+    (std::abs(left._residualVelocity - right._residualVelocity) < 0.01f);
 }
 
 std::ostream & operator<<(std::ostream & str, const CollisionData & data)
