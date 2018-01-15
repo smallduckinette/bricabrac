@@ -43,6 +43,12 @@ std::ostream & operator<<(std::ostream & str, const CollisionData & data)
   return str;
 }
 
+sf::Vector2f normalize(const sf::Vector2f & v)
+{
+  float norm = std::sqrt(v.x * v.x + v.y * v.y);
+  return sf::Vector2f(v.x / norm, v.y / norm);
+}
+
 Disc::Disc(const sf::Vector2f & position,
            float radius):
   _position(position),
@@ -122,9 +128,11 @@ CollisionDataOpt Rectangle::testHorizontalHit(float y,
   {
     sf::Vector2f newPosition = position + direction * delta;
     if(newPosition.x >= minx && newPosition.x <= maxx)
-      return CollisionData(newPosition,
+    {
+       return CollisionData(newPosition,
                            sf::Vector2f(direction.x, -direction.y),
                            velocity - delta);
+    }
   }
   return {};
 }
@@ -153,7 +161,7 @@ CollisionDataOpt Rectangle::testSphereHit(const sf::Vector2f & centre,
                                           const sf::Vector2f & position,
                                           const sf::Vector2f & direction,
                                           float velocity) const
-{
+{  
   sf::Vector2f pc = position - centre;
   float a = direction.x * direction.x + direction.y * direction.y;
   float b = 2 * (direction.x * pc.x + direction.y * pc.y);
@@ -170,7 +178,7 @@ CollisionDataOpt Rectangle::testSphereHit(const sf::Vector2f & centre,
       sf::Vector2f newPosition = position + direction * delta;
       
       // To calculate our new direction, we build a base from vector np - c
-      sf::Vector2f newy = newPosition - centre;
+      sf::Vector2f newy = normalize(newPosition - centre);
       sf::Vector2f newx = sf::Vector2f(newy.y, -newy.x);
       
       // Project our direction vector in that base

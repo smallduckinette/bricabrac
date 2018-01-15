@@ -10,11 +10,12 @@ Brick::Brick(const sf::Texture & texture, int x, int y):
   setPosition(x, y);
 }
 
-boost::optional<CollisionData> Brick::testCollision(const Disc &,
-                                                    const sf::Vector2f &,
-                                                    float) const
+boost::optional<CollisionData> Brick::testCollision(const Disc & disc,
+                                                    const sf::Vector2f & direction,
+                                                    float velocity) const
 {
-  return {};
+  return Rectangle(sf::Vector2f(_x, _y),
+                   sf::Vector2f(_x + 50, _y + 30)).testHit(disc, direction, velocity);
 }
 
 bool Brick::commitCollision()

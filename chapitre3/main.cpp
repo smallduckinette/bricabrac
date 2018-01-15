@@ -3,9 +3,11 @@
 #include <SFML/Graphics.hpp>
 
 #include <iostream>
+#include <memory>
 
 #include "plateau.h"
 #include "brick.h"
+#include "ball.h"
 
 int main()
 {
@@ -21,17 +23,20 @@ int main()
     texture.setSmooth(true);
     
     Plateau plateau;
-    std::vector<Brick> bricks;
+    std::vector<std::shared_ptr<Item> > world;
     for(int x = 0; x < 16; ++x)
     {
       for(int y = 0; y < 8; y++)
       {
-        bricks.push_back(Brick(texture, x * 50, y * 30 + 50));
+        world.push_back(std::make_shared<Brick>(texture, x * 50, y * 30 + 50));
       }
     }
     
+    Ball ball;
+    
     sf::Mouse::setPosition(sf::Vector2i(400, 560), window);
-  
+
+    sf::Clock clock;
     while(window.isOpen())
     {
       sf::Event event;
@@ -46,12 +51,16 @@ int main()
           plateau.move(event.mouseMove.x);
         }
       }
-    
+      
+      sf::Time elapsed = clock.restart();
+      ball.update(elapsed, world);
+      
       window.clear();
       window.draw(plateau);
-      for(auto && brick : bricks)
+      window.draw(ball);
+      for(auto && item : world)
       {
-        window.draw(brick);
+        item->draw(&window);
       }
       window.display();
     }

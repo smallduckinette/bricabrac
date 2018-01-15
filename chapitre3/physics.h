@@ -28,6 +28,8 @@ namespace sf
   }
 }
 
+sf::Vector2f normalize(const sf::Vector2f & v);
+
 class CollisionData
 {
 public:
