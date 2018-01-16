@@ -14,7 +14,7 @@ UTEST_OBJS = $(UTEST_SRCS:.cpp=.o)
 
 # Library
 LIB    = libbab.a
-SRCS   = ball.cpp brick.cpp plateau.cpp physics.cpp
+SRCS   = ball.cpp brick.cpp collisiondata.cpp plateau.cpp physics.cpp vector.cpp
 OBJS   = $(SRCS:.cpp=.o)
 
 # Dependencies
