@@ -5,9 +5,10 @@
 #include <iostream>
 #include <memory>
 
-#include "plateau.h"
+#include "paddle.h"
 #include "brick.h"
 #include "ball.h"
+#include "frame.h"
 
 int main()
 {
@@ -22,7 +23,6 @@ int main()
       throw std::runtime_error("Cannot find brique.png");
     texture.setSmooth(true);
     
-    Plateau plateau;
     std::vector<std::shared_ptr<Item> > world;
     for(int x = 0; x < 16; ++x)
     {
@@ -31,6 +31,11 @@ int main()
         world.push_back(std::make_shared<Brick>(texture, x * 50, y * 30 + 50));
       }
     }
+    
+    world.push_back(std::make_shared<Frame>(800, 600));
+    
+    auto paddle = std::make_shared<Paddle>();
+    world.push_back(paddle);
     
     Ball ball;
     
@@ -48,7 +53,7 @@ int main()
         }
         else if(event.type == sf::Event::MouseMoved)
         {
-          plateau.move(event.mouseMove.x);
+          paddle->move(event.mouseMove.x);
         }
       }
       
@@ -56,7 +61,6 @@ int main()
       ball.update(elapsed, world);
       
       window.clear();
-      window.draw(plateau);
       window.draw(ball);
       for(auto && item : world)
       {

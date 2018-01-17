@@ -2,78 +2,11 @@
 #include "collisiondata.h"
 
 
-Disc::Disc(const sf::Vector2f & position,
-           float radius):
-  _position(position),
-  _radius(radius)
-{
-}
-
-Rectangle::Rectangle(const sf::Vector2f & m1,
-                     const sf::Vector2f & m2):
-  _min(m1),
-  _max(m2)
-{
-}
-
-CollisionDataOpt Rectangle::testHit(const Disc & disc,
-                                    const sf::Vector2f & direction,
-                                    float velocity) const
-{
-  CollisionDataOpt cd;
-  if(direction.x != 0)
-  {
-    // Test against the right wall if we are going left,
-    // or against the left wall if we are going right
-    cd = cd ^ testVerticalHit((direction.x < 0) ? (_max.x + disc._radius) : (_min.x - disc._radius),
-                              _min.y, _max.y,
-                              disc._position,
-                              direction,
-                              velocity);
-    
-    // Also test against the right spheres if we are going left, etc
-    cd = cd ^ testSphereHit((direction.x < 0) ? sf::Vector2f(_max.x, _min.y) : sf::Vector2f(_min.x, _min.y), 
-                            disc._radius,
-                            disc._position,
-                            direction,
-                            velocity);
-    cd = cd ^ testSphereHit((direction.x < 0) ? sf::Vector2f(_max.x, _max.y) : sf::Vector2f(_min.x, _max.y), 
-                            disc._radius,
-                            disc._position,
-                            direction,
-                            velocity);
-  }
-  if(direction.y != 0)
-  {
-    // Test against the top wall if we are going down,
-    // or against the bottom wall if we are going up
-    cd = cd ^ testHorizontalHit((direction.y < 0) ? (_max.y + disc._radius) : (_min.y - disc._radius),
-                                _min.x, _max.x,
-                                disc._position,
-                                direction,
-                                velocity);
-    
-    // And same with spheres
-    cd = cd ^ testSphereHit((direction.y < 0) ? sf::Vector2f(_min.x, _max.y) : sf::Vector2f(_min.x, _min.y), 
-                            disc._radius,
-                            disc._position,
-                            direction,
-                            velocity);
-    cd = cd ^ testSphereHit((direction.y < 0) ? sf::Vector2f(_max.x, _max.y) : sf::Vector2f(_max.x, _min.y), 
-                            disc._radius,
-                            disc._position,
-                            direction,
-                            velocity);    
-  }  
-  
-  return cd;
-}
-
-CollisionDataOpt Rectangle::testHorizontalHit(float y,
-                                              float minx, float maxx,
-                                              const sf::Vector2f & position,
-                                              const sf::Vector2f & direction,
-                                              float velocity) const
+CollisionDataOpt physics::testHorizontalHit(float y,
+                                            float minx, float maxx,
+                                            const sf::Vector2f & position,
+                                            const sf::Vector2f & direction,
+                                            float velocity)
 {
   float delta = (y - position.y) / direction.y;
   
@@ -90,11 +23,11 @@ CollisionDataOpt Rectangle::testHorizontalHit(float y,
   return {};
 }
 
-CollisionDataOpt Rectangle::testVerticalHit(float x,
-                                            float miny, float maxy,
-                                            const sf::Vector2f & position,
-                                            const sf::Vector2f & direction,
-                                            float velocity) const
+CollisionDataOpt physics::testVerticalHit(float x,
+                                          float miny, float maxy,
+                                          const sf::Vector2f & position,
+                                          const sf::Vector2f & direction,
+                                          float velocity)
 {
   float delta = (x - position.x) / direction.x;
   
@@ -109,11 +42,11 @@ CollisionDataOpt Rectangle::testVerticalHit(float x,
   return {};
 }
 
-CollisionDataOpt Rectangle::testSphereHit(const sf::Vector2f & centre,
-                                          float radius,
-                                          const sf::Vector2f & position,
-                                          const sf::Vector2f & direction,
-                                          float velocity) const
+CollisionDataOpt physics::testSphereHit(const sf::Vector2f & centre,
+                                        float radius,
+                                        const sf::Vector2f & position,
+                                        const sf::Vector2f & direction,
+                                        float velocity)
 {  
   sf::Vector2f pc = position - centre;
   float a = direction.x * direction.x + direction.y * direction.y;
@@ -147,4 +80,71 @@ CollisionDataOpt Rectangle::testSphereHit(const sf::Vector2f & centre,
     }
   }
   return {};
+}
+
+Disc::Disc(const sf::Vector2f & position,
+           float radius):
+  _position(position),
+  _radius(radius)
+{
+}
+
+Rectangle::Rectangle(const sf::Vector2f & m1,
+                     const sf::Vector2f & m2):
+  _min(m1),
+  _max(m2)
+{
+}
+
+CollisionDataOpt Rectangle::testHit(const Disc & disc,
+                                    const sf::Vector2f & direction,
+                                    float velocity) const
+{
+  CollisionDataOpt cd;
+  if(direction.x != 0)
+  {
+    // Test against the right wall if we are going left,
+    // or against the left wall if we are going right
+    cd = cd ^ physics::testVerticalHit((direction.x < 0) ? (_max.x + disc._radius) : (_min.x - disc._radius),
+                                       _min.y, _max.y,
+                                       disc._position,
+                                       direction,
+                                       velocity);
+    
+    // Also test against the right spheres if we are going left, etc
+    cd = cd ^ physics::testSphereHit((direction.x < 0) ? sf::Vector2f(_max.x, _min.y) : sf::Vector2f(_min.x, _min.y), 
+                                     disc._radius,
+                                     disc._position,
+                                     direction,
+                                     velocity);
+    cd = cd ^ physics::testSphereHit((direction.x < 0) ? sf::Vector2f(_max.x, _max.y) : sf::Vector2f(_min.x, _max.y), 
+                                     disc._radius,
+                                     disc._position,
+                                     direction,
+                                     velocity);
+  }
+  if(direction.y != 0)
+  {
+    // Test against the top wall if we are going down,
+    // or against the bottom wall if we are going up
+    cd = cd ^ physics::testHorizontalHit((direction.y < 0) ? (_max.y + disc._radius) : (_min.y - disc._radius),
+                                         _min.x, _max.x,
+                                         disc._position,
+                                         direction,
+                                         velocity);
+    
+    // And same with spheres
+    cd = cd ^ physics::testSphereHit((direction.y < 0) ? sf::Vector2f(_min.x, _max.y) : sf::Vector2f(_min.x, _min.y), 
+                                     disc._radius,
+                                     disc._position,
+                                     direction,
+                                     velocity);
+    cd = cd ^ physics::testSphereHit((direction.y < 0) ? sf::Vector2f(_max.x, _max.y) : sf::Vector2f(_max.x, _min.y), 
+                                     disc._radius,
+                                     disc._position,
+                                     direction,
+                                     velocity);    
+  }  
+  
+  return cd;
 }

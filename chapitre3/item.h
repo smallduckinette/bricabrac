@@ -2,6 +2,7 @@
 #define __CHAPITRE2_ITEM_H__
 
 #include <SFML/Window.hpp>
+#include <SFML/Graphics/RenderWindow.hpp>
 
 #include <boost/optional.hpp>
 

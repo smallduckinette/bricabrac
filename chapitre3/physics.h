@@ -4,6 +4,25 @@
 #include "vector.h"
 #include "collisiondata.h"
 
+namespace physics
+{
+  CollisionDataOpt testHorizontalHit(float y,
+                                     float minx, float maxx,
+                                     const sf::Vector2f & position,
+                                     const sf::Vector2f & direction,
+                                     float velocity);
+  CollisionDataOpt testVerticalHit(float x,
+                                   float miny, float maxy,
+                                   const sf::Vector2f & position,
+                                   const sf::Vector2f & direction,
+                                   float velocity);
+  CollisionDataOpt testSphereHit(const sf::Vector2f & centre,
+                                 float radius,
+                                 const sf::Vector2f & position,
+                                 const sf::Vector2f & direction,
+                                 float velocity);
+}
+
 class Disc
 {
 public:
@@ -24,23 +43,7 @@ public:
                            const sf::Vector2f & direction,
                            float velocity) const;
   
-private:
-  CollisionDataOpt testHorizontalHit(float y,
-                                     float minx, float maxx,
-                                     const sf::Vector2f & position,
-                                     const sf::Vector2f & direction,
-                                     float velocity) const;
-  CollisionDataOpt testVerticalHit(float x,
-                                   float miny, float maxy,
-                                   const sf::Vector2f & position,
-                                   const sf::Vector2f & direction,
-                                   float velocity) const;
-  CollisionDataOpt testSphereHit(const sf::Vector2f & centre,
-                                 float radius,
-                                 const sf::Vector2f & position,
-                                 const sf::Vector2f & direction,
-                                 float velocity) const;
-  
+private:  
   sf::Vector2f _min;
   sf::Vector2f _max;  
 };
