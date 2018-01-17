@@ -4,6 +4,7 @@
 
 #include <iostream>
 #include <memory>
+#include <set>
 
 #include "paddle.h"
 #include "brick.h"
@@ -23,19 +24,19 @@ int main()
       throw std::runtime_error("Cannot find brique.png");
     texture.setSmooth(true);
     
-    std::vector<std::shared_ptr<Item> > world;
+    std::set<std::shared_ptr<Item> > world;
     for(int x = 0; x < 16; ++x)
     {
       for(int y = 0; y < 8; y++)
       {
-        world.push_back(std::make_shared<Brick>(texture, x * 50, y * 30 + 50));
+        world.insert(std::make_shared<Brick>(texture, x * 50, y * 30 + 50));
       }
     }
     
-    world.push_back(std::make_shared<Frame>(800, 600));
+    world.insert(std::make_shared<Frame>(800, 600));
     
     auto paddle = std::make_shared<Paddle>();
-    world.push_back(paddle);
+    world.insert(paddle);
     
     Ball ball;
     

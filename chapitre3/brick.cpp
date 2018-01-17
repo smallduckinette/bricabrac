@@ -20,7 +20,7 @@ boost::optional<CollisionData> Brick::testCollision(const Disc & disc,
 
 bool Brick::commitCollision()
 {
-  return false;
+  return true;
 }
 
 void Brick::draw(sf::RenderWindow * window)

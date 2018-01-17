@@ -15,24 +15,35 @@ Ball::Ball():
   setPosition(_position.x, _position.y);
 }
 
-void Ball::update(sf::Time elapsed, const std::vector<std::shared_ptr<Item> > & world)
+void Ball::update(sf::Time elapsed, std::set<std::shared_ptr<Item> > & world)
 {
   float residualVelocity = _velocity * elapsed.asSeconds();
   while(residualVelocity > 0)
   {
-    CollisionDataOpt c;
+    CollisionDataOpt bestCollision;
+    std::shared_ptr<Item> bestItem;
+    
     Disc disc(_position, 10);
     
     for(auto && item : world)
     {
-      c = c ^ item->testCollision(disc, _direction, residualVelocity);
-      
+      auto currentCollision = item->testCollision(disc, _direction, residualVelocity);
+      if(currentCollision && (!bestCollision || currentCollision > bestCollision))
+      {
+        bestCollision = currentCollision;
+        bestItem = item;
+      }
     }
-    if(c)
+    if(bestCollision)
     {
-      _position = c->_position;
-      _direction = c->_direction;
-      residualVelocity = c->_residualVelocity;
+      _position = bestCollision->_position;
+      _direction = bestCollision->_direction;
+      residualVelocity = bestCollision->_residualVelocity;
+      if(bestItem->commitCollision())
+      {
+        world.erase(bestItem);
+      }
+      _velocity += 20;
     }
     else
     {

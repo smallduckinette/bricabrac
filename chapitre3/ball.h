@@ -2,6 +2,7 @@
 #define __CHAPITRE3_BALL_H__
 
 #include <memory>
+#include <set>
 #include <SFML/Graphics.hpp>
 
 #include "physics.h"
@@ -13,7 +14,7 @@ class Ball : public sf::Sprite
 public:
   Ball();
   
-  void update(sf::Time elapsed, const std::vector<std::shared_ptr<Item> > & world);
+  void update(sf::Time elapsed, std::set<std::shared_ptr<Item> > & world);
   
 private:
   sf::Vector2f _position;
