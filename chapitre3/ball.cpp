@@ -43,7 +43,6 @@ void Ball::update(sf::Time elapsed, std::set<std::shared_ptr<Item> > & world)
       {
         world.erase(bestItem);
       }
-      _velocity += 20;
     }
     else
     {
