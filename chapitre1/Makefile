@@ -1,6 +1,6 @@
 CXX = g++
 CXXFLAGS = -ggdb -O3 -std=c++17 -W -Wall -Werror -ansi -pedantic
-LDFLAGS  = -lsfml-graphics -lsfml-window -lsfml-system -pthread
+LDFLAGS  = -fuse-ld=gold -lsfml-graphics -lsfml-window -lsfml-system -pthread
 
 TARGET = main.app
 SRCS   = main.cpp

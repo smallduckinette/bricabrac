@@ -1,6 +1,6 @@
 CXX = g++
 CXXFLAGS = -ggdb -O3 -std=c++11 -W -Wall -Werror -pedantic
-LDFLAGS  = -lsfml-graphics -lsfml-window -lsfml-system -lsfml-audio -pthread
+LDFLAGS  = -fuse-ld=gold -lsfml-graphics -lsfml-window -lsfml-system -lsfml-audio -pthread
 
 # Main binary
 TARGET      = main.app
