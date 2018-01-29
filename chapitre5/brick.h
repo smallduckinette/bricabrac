@@ -22,7 +22,10 @@ public:
   bool commitCollision() override;
   
   void draw(sf::RenderWindow * window) override;
-
+  
+protected:
+  void playSound();
+  
 private:
   int _x;
   int _y;

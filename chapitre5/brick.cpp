@@ -22,9 +22,14 @@ boost::optional<CollisionData> Brick::testCollision(const Disc & disc,
 
 bool Brick::commitCollision()
 {
-  _bing->setPosition((getPosition().x - 400.0) / 400, 0, 0.1);
-  _bing->play();
+  playSound();
   return true;
+}
+
+void Brick::playSound()
+{
+  _bing->setPosition((getPosition().x - 400.0) / 400, 0, 0.1);
+  _bing->play();  
 }
 
 void Brick::draw(sf::RenderWindow * window)

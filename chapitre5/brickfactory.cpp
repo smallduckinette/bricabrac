@@ -1,6 +1,7 @@
 #include "brickfactory.h"
 
 #include "brick.h"
+#include "hardbrick.h"
 
 BrickFactory::BrickFactory()
 {
@@ -15,5 +16,12 @@ BrickFactory::BrickFactory()
 
 std::shared_ptr<Item> BrickFactory::create(int row, int col, int brickType) const
 {
-  return std::make_shared<Brick>(_texture, brickType, _bing, col * 50, row * 30 + 50);
+  if(brickType == 5)
+  {
+    return std::make_shared<HardBrick>(_texture, brickType, _bing, col * 50, row * 30 + 50);
+  }
+  else
+  {
+    return std::make_shared<Brick>(_texture, brickType, _bing, col * 50, row * 30 + 50);
+  }
 }
