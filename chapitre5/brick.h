@@ -13,7 +13,7 @@ class Brick : public sf::Sprite,
               public Item
 {
 public:
-  Brick(const sf::Texture & texture, const std::shared_ptr<sf::Sound> & bing, int x, int y);
+  Brick(const sf::Texture & texture, int textureIndex, const std::shared_ptr<sf::Sound> & bing, int x, int y);
   
   boost::optional<CollisionData> testCollision(const Disc & disc,
                                                const sf::Vector2f & direction,

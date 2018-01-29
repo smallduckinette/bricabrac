@@ -21,9 +21,9 @@ void buildScreen(const BrickFactory & brickFactory,
                   std::istream_iterator<int>(),
                   [&](int brickType)
                   {
-                    if(brickType == 1)
+                    if(brickType > 0)
                     {
-                      world.push_back(brickFactory.create(row, col));
+                      world.push_back(brickFactory.create(row, col, brickType));
                     }
                     ++col;
                   });

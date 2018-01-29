@@ -15,7 +15,7 @@ public:
   BrickFactory(const BrickFactory &) = delete;
   BrickFactory & operator=(const BrickFactory &) = delete;
   
-  std::shared_ptr<Item> create(int row, int col) const;
+  std::shared_ptr<Item> create(int row, int col, int brickType) const;
   
 private:
   sf::Texture _texture;

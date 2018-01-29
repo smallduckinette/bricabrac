@@ -2,13 +2,14 @@
 #include "collisiondata.h"
 #include "physics.h"
 
-Brick::Brick(const sf::Texture & texture, const std::shared_ptr<sf::Sound> & bing, int x, int y):
+Brick::Brick(const sf::Texture & texture, int textureIndex, const std::shared_ptr<sf::Sound> & bing, int x, int y):
   _x(x),
   _y(y),
   _bing(bing)
 {
   setTexture(texture);
   setPosition(x, y);
+  setTextureRect(sf::IntRect(0, (textureIndex - 1) * 30, 50, 30));
 }
 
 boost::optional<CollisionData> Brick::testCollision(const Disc & disc,

@@ -4,7 +4,7 @@
 Ball::Ball():
   _position(350, 550),
   _direction(normalize(sf::Vector2f(1, -1))),
-  _velocity(200)
+  _velocity(300)
 {
   if(!_texture.loadFromFile("../resources/bille.png"))
     throw std::runtime_error("Cannot find bille.png");
