@@ -4,15 +4,8 @@
 
 #include <iostream>
 #include <memory>
-#include <list>
-#include <fstream>
 
-#include "ball.h"
-#include "brick.h"
-#include "brickfactory.h"
-#include "frame.h"
-#include "paddle.h"
-#include "level.h"
+#include "gamescreen.h"
 
 int main()
 {
@@ -21,23 +14,9 @@ int main()
     sf::RenderWindow window(sf::VideoMode(800, 600), "BricABrac");
     window.setVerticalSyncEnabled(true);
     window.setMouseCursorVisible(false);
-
-    BrickFactory brickFactory;
     
-    std::list<std::shared_ptr<Item> > world;
-
-    std::ifstream level("../resources/screen1.txt");
-    buildLevel(brickFactory, level, world);
+    std::shared_ptr<Screen> currentScreen = std::make_shared<GameScreen>();
     
-    world.push_back(std::make_shared<Frame>(800, 600));
-    
-    auto paddle = std::make_shared<Paddle>();
-    world.push_back(paddle);
-    
-    Ball ball;
-    
-    sf::Mouse::setPosition(sf::Vector2i(400, 560), window);
-
     sf::Clock clock;
     while(window.isOpen())
     {
@@ -50,19 +29,21 @@ int main()
         }
         else if(event.type == sf::Event::MouseMoved)
         {
-          paddle->move(event.mouseMove.x);
+          auto screen = currentScreen->onMouseMove(event.mouseMove.x,
+                                                   event.mouseMove.y);
+          if(screen)
+            currentScreen = screen;
         }
       }
       
       sf::Time elapsed = clock.restart();
-      ball.update(elapsed, world);
-
+      
+      auto screen = currentScreen->onFrame(elapsed);
+      if(screen)
+        currentScreen = screen;
+      
       window.clear();
-      window.draw(ball);
-      for(auto && item : world)
-      {
-        item->draw(&window);
-      }
+      currentScreen->draw(window);
       window.display();
     }
   }
