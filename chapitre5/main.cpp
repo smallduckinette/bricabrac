@@ -12,7 +12,7 @@
 #include "brickfactory.h"
 #include "frame.h"
 #include "paddle.h"
-#include "screen.h"
+#include "level.h"
 
 int main()
 {
@@ -26,8 +26,8 @@ int main()
     
     std::list<std::shared_ptr<Item> > world;
 
-    std::ifstream screen("../resources/screen1.txt");
-    buildScreen(brickFactory, screen, world);
+    std::ifstream level("../resources/screen1.txt");
+    buildLevel(brickFactory, level, world);
     
     world.push_back(std::make_shared<Frame>(800, 600));
     

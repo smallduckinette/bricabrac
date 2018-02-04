@@ -2,8 +2,13 @@
 
 #include <cmath>
 
-sf::Vector2f normalize(const sf::Vector2f & v)
+sf::Vector2f sf::normalize(const sf::Vector2f & v)
 {
-  float norm = std::sqrt(v.x * v.x + v.y * v.y);
-  return sf::Vector2f(v.x / norm, v.y / norm);
+  float n = norm(v);
+  return sf::Vector2f(v.x / n, v.y / n);
+}
+
+float sf::norm(const sf::Vector2f & v)
+{
+  return std::sqrt(v.x * v.x + v.y * v.y);
 }

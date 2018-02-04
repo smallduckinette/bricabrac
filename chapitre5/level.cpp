@@ -1,4 +1,4 @@
-#include "screen.h"
+#include "level.h"
 
 #include <sstream>
 #include <algorithm>
@@ -6,9 +6,9 @@
 
 #include "brickfactory.h"
 
-void buildScreen(const BrickFactory & brickFactory,
-                 std::istream & str,
-                 std::list<std::shared_ptr<Item> > & world)
+void buildLevel(const BrickFactory & brickFactory,
+                std::istream & str,
+                std::list<std::shared_ptr<Item> > & world)
 {
   int row = 0;
   std::string line;

@@ -25,8 +25,10 @@ namespace sf
   {
     return (std::abs(left.x - right.x) < epsilon) && (std::abs(left.y - right.y) < epsilon);
   }
-}
 
-sf::Vector2f normalize(const sf::Vector2f & v);
+  sf::Vector2f normalize(const sf::Vector2f & v);
+  
+  float norm(const sf::Vector2f & v);
+}
 
 #endif
