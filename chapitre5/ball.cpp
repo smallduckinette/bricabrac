@@ -15,7 +15,7 @@ Ball::Ball():
   setPosition(_position.x, _position.y);
 }
 
-void Ball::update(sf::Time elapsed, std::list<std::shared_ptr<Item> > & world)
+bool Ball::update(sf::Time elapsed, std::list<std::shared_ptr<Item> > & world)
 {
   float residualVelocity = _velocity * elapsed.asSeconds();
   while(residualVelocity > 0)
@@ -55,4 +55,6 @@ void Ball::update(sf::Time elapsed, std::list<std::shared_ptr<Item> > & world)
   }
   
   setPosition(_position.x, _position.y);
+  
+  return (_position.y > 600);
 }

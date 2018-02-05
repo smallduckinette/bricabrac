@@ -14,8 +14,9 @@ class Ball : public sf::Sprite
 {
 public:
   Ball();
-  
-  void update(sf::Time elapsed, std::list<std::shared_ptr<Item> > & world);
+
+  /// Returns true if the ball is outside the boundaries (player has lost)
+  bool update(sf::Time elapsed, std::list<std::shared_ptr<Item> > & world);
   
 private:
   sf::Vector2f _position;

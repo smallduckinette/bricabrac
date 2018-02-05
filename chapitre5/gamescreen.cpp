@@ -32,8 +32,14 @@ std::shared_ptr<Screen> GameScreen::onMouseMove(int x, int)
 
 std::shared_ptr<Screen> GameScreen::onFrame(sf::Time elapsed)
 {
-  _ball->update(elapsed, _world);
-  return nullptr;
+  if(_ball->update(elapsed, _world))
+  {
+    return std::make_shared<GameScreen>();
+  }
+  else
+  {
+    return nullptr;
+  }
 }
 
 void GameScreen::draw(sf::RenderWindow & window)
