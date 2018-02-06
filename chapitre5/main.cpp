@@ -5,7 +5,7 @@
 #include <iostream>
 #include <memory>
 
-#include "gamescreen.h"
+#include "titlescreen.h"
 
 int main()
 {
@@ -15,7 +15,7 @@ int main()
     window.setVerticalSyncEnabled(true);
     window.setMouseCursorVisible(false);
     
-    std::shared_ptr<Screen> currentScreen = std::make_shared<GameScreen>();
+    std::shared_ptr<Screen> currentScreen = std::make_shared<TitleScreen>();
     
     sf::Clock clock;
     while(window.isOpen())
@@ -31,6 +31,14 @@ int main()
         {
           auto screen = currentScreen->onMouseMove(event.mouseMove.x,
                                                    event.mouseMove.y);
+          if(screen)
+            currentScreen = screen;
+        }
+        else if(event.type == sf::Event::MouseButtonPressed)
+        {
+          auto screen = currentScreen->onMouseClick(event.mouseButton.x,
+                                                    event.mouseButton.y);
+
           if(screen)
             currentScreen = screen;
         }

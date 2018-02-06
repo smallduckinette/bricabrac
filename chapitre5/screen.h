@@ -12,6 +12,7 @@ class Screen
 public:
   virtual ~Screen() = default;
   
+  virtual std::shared_ptr<Screen> onMouseClick(int x, int y);
   virtual std::shared_ptr<Screen> onMouseMove(int x, int y);
   virtual std::shared_ptr<Screen> onFrame(sf::Time elapsed);
   virtual void draw(sf::RenderWindow & window);
