@@ -9,6 +9,7 @@ public:
   void draw(sf::RenderWindow & window) override;
   
   void addBackground(const std::string & file);
+  void addButton(const std::string & file, int x, int y);
   
 private:
   std::vector<std::shared_ptr<sf::Drawable> > _items;

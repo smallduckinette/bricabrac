@@ -13,7 +13,7 @@ int main()
   {
     sf::RenderWindow window(sf::VideoMode(800, 600), "BricABrac");
     window.setVerticalSyncEnabled(true);
-    window.setMouseCursorVisible(false);
+    //window.setMouseCursorVisible(false);
     
     std::shared_ptr<Screen> currentScreen = std::make_shared<TitleScreen>();
     
