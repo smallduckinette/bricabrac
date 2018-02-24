@@ -1,10 +1,14 @@
 #include "ball.h"
 #include "item.h"
 
-Ball::Ball():
+Ball::Ball(float initialVelocity,
+           float maxVelocity,
+           float acceleration):
   _position(350, 550),
   _direction(normalize(sf::Vector2f(1, -1))),
-  _velocity(300)
+  _velocity(initialVelocity),
+  _maxVelocity(maxVelocity),
+  _acceleration(acceleration)
 {
   if(!_texture.loadFromFile("../resources/bille.png"))
     throw std::runtime_error("Cannot find bille.png");
@@ -45,6 +49,12 @@ bool Ball::update(sf::Time elapsed, std::list<std::shared_ptr<Item> > & world)
       if((*bestItem)->commitCollision())
       {
         world.erase(bestItem);
+      }
+
+      // There was a collision, so let's accelerate
+      if(_velocity < _maxVelocity)
+      {
+        _velocity += _acceleration;
       }
     }
     else

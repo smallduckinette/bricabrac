@@ -14,8 +14,9 @@ public:
   
   virtual std::shared_ptr<Screen> onMouseClick(int x, int y);
   virtual std::shared_ptr<Screen> onMouseMove(int x, int y);
+  virtual std::shared_ptr<Screen> onKey(const sf::Event::KeyEvent & key);
   virtual std::shared_ptr<Screen> onFrame(sf::Time elapsed);
-  virtual void draw(sf::RenderWindow & window);
+  virtual void draw();
 };
 
 #endif

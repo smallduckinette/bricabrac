@@ -13,9 +13,8 @@ int main()
   {
     sf::RenderWindow window(sf::VideoMode(800, 600), "BricABrac");
     window.setVerticalSyncEnabled(true);
-    //window.setMouseCursorVisible(false);
     
-    std::shared_ptr<Screen> currentScreen = std::make_shared<TitleScreen>();
+    std::shared_ptr<Screen> currentScreen = std::make_shared<TitleScreen>(&window);
     
     sf::Clock clock;
     while(window.isOpen())
@@ -42,6 +41,13 @@ int main()
           if(screen)
             currentScreen = screen;
         }
+        else if(event.type == sf::Event::KeyPressed)
+        {
+          auto screen = currentScreen->onKey(event.key);
+
+          if(screen)
+            currentScreen = screen;
+        }
       }
       
       sf::Time elapsed = clock.restart();
@@ -51,7 +57,7 @@ int main()
         currentScreen = screen;
       
       window.clear();
-      currentScreen->draw(window);
+      currentScreen->draw();
       window.display();
     }
   }
