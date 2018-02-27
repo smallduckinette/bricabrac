@@ -22,10 +22,16 @@ public:
   
   /// Set the ball sticky : it will stop moving
   void setSticky(bool sticky);
+
+  /// Returns if the ball is sticky
   bool isSticky() const;
+  
+  /// Reset the ball sticky at position, with default direction and velocity
+  void reset(const sf::Vector2f & position);
   
 private:
   sf::Vector2f _direction;
+  float _initialVelocity;
   float _velocity;
   float _maxVelocity;
   float _acceleration;

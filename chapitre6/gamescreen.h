@@ -9,6 +9,7 @@
 class Item;
 class Ball;
 class Paddle;
+class Lifes;
 
 class GameScreen : public Screen
 {
@@ -31,6 +32,7 @@ private:
   std::list<std::shared_ptr<Item> > _world;
   std::shared_ptr<Ball> _ball;
   std::shared_ptr<Paddle> _paddle;
+  std::shared_ptr<Lifes> _lifes;
   float _initialVelocity;
   float _maxVelocity;
   float _acceleration;

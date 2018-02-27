@@ -5,6 +5,7 @@
 #include "paddle.h"
 #include "ball.h"
 #include "level.h"
+#include "lifes.h"
 #include "frame.h"
 #include "titlescreen.h"
 
@@ -17,6 +18,7 @@ GameScreen::GameScreen(sf::RenderWindow * window,
                                maxVelocity,
                                acceleration)),
   _paddle(std::make_shared<Paddle>()),
+  _lifes(std::make_shared<Lifes>(3)),
   _initialVelocity(initialVelocity),
   _maxVelocity(maxVelocity),
   _acceleration(acceleration)
@@ -65,7 +67,18 @@ std::shared_ptr<Screen> GameScreen::onFrame(sf::Time elapsed)
 {
   if(_ball->update(elapsed, _world))
   {
-    return std::make_shared<GameScreen>(_window, _initialVelocity, _maxVelocity, _acceleration);
+    // We got out of the screen, reduce the number of lives
+    if(_lifes->decrement())
+    {
+      // We ran out of lifes, reset the game
+      return std::make_shared<GameScreen>(_window, _initialVelocity, _maxVelocity, _acceleration);
+    }
+    else
+    {
+      // Reset ball position and carry on playing
+      _ball->reset(_paddle->getPosition() - sf::Vector2f(0, 10));
+      return nullptr;
+    }
   }
   else
   {
@@ -80,4 +93,5 @@ void GameScreen::draw()
   {
     item->draw(_window);
   }
+  _window->draw(*_lifes);
 }

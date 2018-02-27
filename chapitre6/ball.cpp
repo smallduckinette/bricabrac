@@ -5,6 +5,7 @@ Ball::Ball(float initialVelocity,
            float maxVelocity,
            float acceleration):
   _direction(normalize(sf::Vector2f(1, -1))),
+  _initialVelocity(initialVelocity),
   _velocity(initialVelocity),
   _maxVelocity(maxVelocity),
   _acceleration(acceleration),
@@ -82,4 +83,12 @@ void Ball::setSticky(bool sticky)
 bool Ball::isSticky() const
 {
   return _sticky;
+}
+
+void Ball::reset(const sf::Vector2f & position)
+{
+  setPosition(position);
+  _direction = normalize(sf::Vector2f(1, -1));
+  _velocity = _initialVelocity;
+  _sticky = true;
 }
