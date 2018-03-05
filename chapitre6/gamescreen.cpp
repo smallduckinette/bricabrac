@@ -26,7 +26,7 @@ GameScreen::GameScreen(sf::RenderWindow * window,
   _window->setMouseCursorVisible(false);
   
   // Bricks
-  std::ifstream level("../resources/screen1.txt");
+  std::ifstream level("../resources/guitar.txt");
   buildLevel(_brickFactory, level, _world);
 
   // Outside walls
