@@ -7,8 +7,15 @@ class LevelDescription
 {
 public:
   LevelDescription(const boost::property_tree::ptree & ptree);
+  LevelDescription(const std::string & levelFilename);
+  
+  void save(boost::property_tree::ptree & ptree) const;
   
   std::string getLevelFilename() const;
+  
+  bool operator==(const LevelDescription & other) const;
+  
+  friend std::ostream & operator<<(std::ostream & str, const LevelDescription & levelDescription);
   
 private:
   std::string _levelFilename;

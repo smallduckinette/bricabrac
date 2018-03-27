@@ -8,10 +8,18 @@
 class Gameplay
 {
 public:
-  Gameplay(const boost::property_tree::ptree & ptree);
-
-private:
   typedef std::vector<std::shared_ptr<const LevelDescription> > Levels;
+
+  Gameplay(const boost::property_tree::ptree & ptree);
+  Gameplay(const Levels & levels);
+  
+  void save(boost::property_tree::ptree & ptree) const;
+  
+  bool operator==(const Gameplay & other) const;
+  
+  friend std::ostream & operator<<(std::ostream & str, const Gameplay & gameplay);
+  
+private:
   Levels _levels;
   Levels::const_iterator _currentLevel;
 };

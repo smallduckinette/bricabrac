@@ -9,7 +9,7 @@ TARGET_OBJS = $(TARGET_SRCS:.cpp=.o)
 
 # Unit-tests
 UTEST      = unittests.app
-UTEST_SRCS = unittests.cpp test_physics.cpp
+UTEST_SRCS = unittests.cpp test_gameplay.cpp test_physics.cpp
 UTEST_OBJS = $(UTEST_SRCS:.cpp=.o)
 
 # Library
