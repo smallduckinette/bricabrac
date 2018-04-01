@@ -8,6 +8,9 @@ class LevelDescription
 public:
   LevelDescription(const boost::property_tree::ptree & ptree);
   LevelDescription(const std::string & levelFilename);
+
+  LevelDescription(const LevelDescription &) = delete;
+  LevelDescription & operator=(const LevelDescription &) = delete;
   
   void save(boost::property_tree::ptree & ptree) const;
   

@@ -5,19 +5,18 @@
 
 #include <SFML/Graphics.hpp>
 
+class Gameplay;
+
 class Lifes : public sf::Drawable
 {
 public:
-  Lifes(unsigned int lifeCount);
+  Lifes(const std::shared_ptr<Gameplay> & gameplay);
   
   /// Implementation of sf::Drawable interface
   void draw(sf::RenderTarget & target, sf::RenderStates states) const override;
   
-  /// Reduces the number of lifes. Return true if the number of lifes has reached 0
-  bool decrement();
-  
 private:
-  unsigned int _lifeCount;
+  std::shared_ptr<Gameplay> _gameplay;
   
   sf::Texture _texture;
   std::shared_ptr<sf::Sprite> _sprite;

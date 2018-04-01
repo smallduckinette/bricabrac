@@ -1,21 +1,38 @@
 #include "gameplay.h"
 
+#include <fstream>
+#include <stdexcept>
 
-Gameplay::Gameplay(const boost::property_tree::ptree & ptree)
-{
+#include <boost/property_tree/json_parser.hpp>
+
+Gameplay::Gameplay(const boost::property_tree::ptree & ptree):
+  _lives(ptree.get<unsigned int>("lives"))
+{ 
   for(auto && t : ptree)
   {
-    _levels.push_back(std::make_shared<LevelDescription>(t.second));
+    if(t.first == "levels")
+      _levels.push_back(std::make_shared<LevelDescription>(t.second));
   }
+  if(_levels.empty())
+    throw std::runtime_error("No gameplay data");
+  
+  _currentLevel = _levels.begin();
 }
 
-Gameplay::Gameplay(const Levels & levels):
+Gameplay::Gameplay(int lives, const Levels & levels):
+  _lives(lives),
   _levels(levels)
 {
+  if(_levels.empty())
+    throw std::runtime_error("No gameplay data");
+  
+  _currentLevel = _levels.begin();
 }
 
 void Gameplay::save(boost::property_tree::ptree & ptree) const
 {
+  ptree.put("lives", _lives);
+  
   for(auto && level : _levels)
   {
     boost::property_tree::ptree subtree;
@@ -53,4 +70,41 @@ std::ostream & operator<<(std::ostream & str, const Gameplay & gameplay)
   }
   str << "}";
   return str;
+}
+
+unsigned int Gameplay::getLives() const
+{
+  return _lives;
+}
+
+const LevelDescription & Gameplay::getCurrentLevel() const
+{
+  return **_currentLevel;
+}
+
+void Gameplay::success()
+{
+  ++_currentLevel;
+}
+
+bool Gameplay::failure()
+{
+  if(_lives == 0)
+  {
+    return false;
+  }
+  else
+  {
+    --_lives;
+    return true;
+  }
+}
+
+std::shared_ptr<Gameplay> makeGameplay(const std::string & settings)
+{
+  std::ifstream data(settings);
+  boost::property_tree::ptree tree;
+  boost::property_tree::json_parser::read_json(data, tree);
+  
+  return std::make_shared<Gameplay>(tree);
 }

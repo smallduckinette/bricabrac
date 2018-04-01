@@ -1,9 +1,9 @@
 #include "lifes.h"
 
+#include "gameplay.h"
 
-
-Lifes::Lifes(unsigned int lifeCount):
-  _lifeCount(lifeCount),
+Lifes::Lifes(const std::shared_ptr<Gameplay> & gameplay):
+  _gameplay(gameplay),
   _sprite(std::make_shared<sf::Sprite>())
 {
   if(!_texture.loadFromFile("../resources/plateau.png"))
@@ -16,19 +16,9 @@ Lifes::Lifes(unsigned int lifeCount):
   
 void Lifes::draw(sf::RenderTarget & target, sf::RenderStates states) const
 {
-  for(unsigned int index = 0; index < _lifeCount; ++index)
+  for(unsigned int index = 0; index < _gameplay->getLives(); ++index)
   {
     _sprite->setPosition(10, 10 + index * 30);
     target.draw(*_sprite, states);
   }
-}
-
-bool Lifes::decrement()
-{
-  if(_lifeCount > 0)
-  {
-    --_lifeCount;
-  }
-  
-  return _lifeCount == 0;
 }

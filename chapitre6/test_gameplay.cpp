@@ -7,6 +7,7 @@
 
 const char * fileContents =
   "{\n"
+  "    \"lives\": \"3\",\n"
   "    \"levels\": {\n"
   "        \"file\": \"level1.txt\"\n"
   "    },\n"
@@ -19,6 +20,7 @@ std::shared_ptr<Gameplay> makeGameplay()
 {
   return std::make_shared<Gameplay>
     (
+     3,
      Gameplay::Levels
     {
       std::make_shared<LevelDescription>("level1.txt"),

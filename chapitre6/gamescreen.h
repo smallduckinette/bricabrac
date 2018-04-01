@@ -10,6 +10,7 @@ class Item;
 class Ball;
 class Paddle;
 class Lifes;
+class Gameplay;
 
 class GameScreen : public Screen
 {
@@ -17,7 +18,8 @@ public:
   GameScreen(sf::RenderWindow * window,
              float initialVelocity,
              float maxVelocity,
-             float acceleration);
+             float acceleration,
+             const std::shared_ptr<Gameplay> & gameplay);
   
   std::shared_ptr<Screen> onMouseMove(int x, int y) override;
   std::shared_ptr<Screen> onMouseClick(sf::Mouse::Button, int x, int y);
@@ -36,6 +38,7 @@ private:
   float _initialVelocity;
   float _maxVelocity;
   float _acceleration;
+  std::shared_ptr<Gameplay> _gameplay;
 };
 
 #endif

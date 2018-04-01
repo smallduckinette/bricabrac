@@ -8,27 +8,32 @@
 #include "lifes.h"
 #include "frame.h"
 #include "titlescreen.h"
+#include "gameplay.h"
 
 GameScreen::GameScreen(sf::RenderWindow * window,
                        float initialVelocity,
                        float maxVelocity,
-                       float acceleration):
+                       float acceleration,
+                       const std::shared_ptr<Gameplay> & gameplay):
   _window(window),
   _ball(std::make_shared<Ball>(initialVelocity,
                                maxVelocity,
                                acceleration)),
   _paddle(std::make_shared<Paddle>()),
-  _lifes(std::make_shared<Lifes>(3)),
+  _lifes(std::make_shared<Lifes>(gameplay)),
   _initialVelocity(initialVelocity),
   _maxVelocity(maxVelocity),
-  _acceleration(acceleration)
+  _acceleration(acceleration),
+  _gameplay(gameplay)
 {
   _window->setMouseCursorVisible(false);
   
   // Bricks
-  std::ifstream level("../resources/guitar.txt");
+  std::ifstream level(gameplay->getCurrentLevel().getLevelFilename().c_str());
+  if(!level.good())
+    throw std::runtime_error("Cannot find level description file " + gameplay->getCurrentLevel().getLevelFilename());
   buildLevel(_brickFactory, level, _world);
-
+  
   // Outside walls
   _world.push_back(std::make_shared<Frame>(800, 600));
 
@@ -68,10 +73,10 @@ std::shared_ptr<Screen> GameScreen::onFrame(sf::Time elapsed)
   if(_ball->update(elapsed, _world))
   {
     // We got out of the screen, reduce the number of lives
-    if(_lifes->decrement())
+    if(_gameplay->failure())
     {
       // We ran out of lifes, reset the game
-      return std::make_shared<GameScreen>(_window, _initialVelocity, _maxVelocity, _acceleration);
+      return std::make_shared<GameScreen>(_window, _initialVelocity, _maxVelocity, _acceleration, _gameplay);
     }
     else
     {
@@ -79,6 +84,13 @@ std::shared_ptr<Screen> GameScreen::onFrame(sf::Time elapsed)
       _ball->reset(_paddle->getPosition() - sf::Vector2f(0, 10));
       return nullptr;
     }
+  }
+  else if(_world.size() == 2)
+  {
+    // Success! Go to the next stage
+    _gameplay->success();
+    
+    return std::make_shared<GameScreen>(_window, _initialVelocity, _maxVelocity, _acceleration, _gameplay);
   }
   else
   {

@@ -1,0 +1,15 @@
+{
+    "lives": 3,
+    "levels": {
+        "file": "../resources/mini.txt"
+    },
+    "levels": {
+        "file": "../resources/piano.txt"
+    },
+    "levels": {
+        "file": "../resources/drums.txt"
+    },
+    "levels": {
+        "file": "../resources/guitar.txt"
+    }
+}

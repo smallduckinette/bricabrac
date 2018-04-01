@@ -1,5 +1,5 @@
 CXX = g++
-CXXFLAGS = -ggdb -O3 -std=c++11 -W -Wall -Werror -pedantic
+CXXFLAGS = -ggdb -O0 -std=c++11 -W -Wall -Werror -pedantic
 LDFLAGS  = -fuse-ld=gold -lsfml-graphics -lsfml-window -lsfml-system -lsfml-audio -pthread
 
 # Main binary
@@ -18,7 +18,7 @@ SRCS   = ball.cpp brick.cpp brickfactory.cpp collisiondata.cpp frame.cpp gamepla
 OBJS   = $(SRCS:.cpp=.o)
 
 # Dependencies
-DEPS   = $(SRCS:.cpp=.depends) $(TARGET_SRCS:.cpp=.depends) 
+DEPS   = $(SRCS:.cpp=.depends) $(TARGET_SRCS:.cpp=.depends) $(UTEST_SRCS:.cpp=.depends) 
 
 
 .PHONY: clean all
