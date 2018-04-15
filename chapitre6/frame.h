@@ -17,6 +17,8 @@ public:
   
   void draw(sf::RenderWindow * window) override;
 
+  bool requiredToWin() const override;
+
 private:
   int _x;
   int _y;

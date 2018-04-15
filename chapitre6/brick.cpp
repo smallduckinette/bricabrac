@@ -36,3 +36,11 @@ void Brick::draw(sf::RenderWindow * window)
 {
   window->draw(*this);
 }
+
+bool Brick::requiredToWin() const
+{
+  // Bricks always need to be destroyed in order to win.
+  // If we ever have unbreakable bricks, they would need
+  // to return false
+  return true;
+}

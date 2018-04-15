@@ -1,5 +1,5 @@
 CXX = g++
-CXXFLAGS = -ggdb -O0 -std=c++11 -W -Wall -Werror -pedantic
+CXXFLAGS = -ggdb -O0 -std=c++14 -W -Wall -Werror -pedantic
 LDFLAGS  = -fuse-ld=gold -lsfml-graphics -lsfml-window -lsfml-system -lsfml-audio -pthread
 
 # Main binary

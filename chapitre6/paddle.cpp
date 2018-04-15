@@ -49,3 +49,8 @@ void Paddle::draw(sf::RenderWindow * window)
 {
   window->draw(*this);
 }
+
+bool Paddle::requiredToWin() const
+{
+  return false;
+}

@@ -85,7 +85,7 @@ std::shared_ptr<Screen> GameScreen::onFrame(sf::Time elapsed)
       return nullptr;
     }
   }
-  else if(_world.size() == 2)
+  else if(std::find_if(_world.begin(), _world.end(), [](auto && item) { return item->requiredToWin(); }) == _world.end())
   {
     // Success! Go to the next stage
     _gameplay->success();

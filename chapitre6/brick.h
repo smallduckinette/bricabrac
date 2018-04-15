@@ -23,6 +23,8 @@ public:
   
   void draw(sf::RenderWindow * window) override;
   
+  bool requiredToWin() const override;
+  
 protected:
   void playSound();
   

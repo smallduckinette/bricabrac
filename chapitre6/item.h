@@ -21,6 +21,9 @@ public:
   
   /// Draw the item
   virtual void draw(sf::RenderWindow * window) = 0;
+  
+  /// Does the object have to be destroyed to win the level ?
+  virtual bool requiredToWin() const = 0;
 };
 
 #endif
