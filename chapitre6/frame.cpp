@@ -45,11 +45,6 @@ bool Frame::commitCollision()
   return false;
 }
 
-void Frame::draw(sf::RenderWindow *)
-{
-  // Do nothing, the frame isn't displayed now
-}
-
 bool Frame::requiredToWin() const
 {
   return false;

@@ -2,13 +2,13 @@
 #define __CHAPITRE2_ITEM_H__
 
 #include <SFML/Window.hpp>
-#include <SFML/Graphics/RenderWindow.hpp>
+#include <SFML/Graphics.hpp>
 
 #include <boost/optional.hpp>
 
 #include "physics.h"
 
-class Item
+class Item : public sf::Sprite
 {
 public:
   /// Test collision with a disc of given radius, position, direction and speed
@@ -18,9 +18,6 @@ public:
   
   /// Indicate that the item was collided. Returns true if the item wants to be destroyed
   virtual bool commitCollision() = 0;
-  
-  /// Draw the item
-  virtual void draw(sf::RenderWindow * window) = 0;
   
   /// Does the object have to be destroyed to win the level ?
   virtual bool requiredToWin() const = 0;

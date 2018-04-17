@@ -1,12 +1,10 @@
 #ifndef __CHAPITRE3_PADDLE_H__
 #define __CHAPITRE3_PADDLE_H__
 
-#include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
 #include "item.h"
 
-class Paddle : public sf::Sprite,
-               public Item
+class Paddle : public Item
 {
 public:
   Paddle();
@@ -19,8 +17,6 @@ public:
   
   bool commitCollision() override;
   
-  void draw(sf::RenderWindow * window) override;
-
   bool requiredToWin() const override;
   
 private:

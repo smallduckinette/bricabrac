@@ -32,13 +32,13 @@ GameScreen::GameScreen(sf::RenderWindow * window,
   std::ifstream level(gameplay->getCurrentLevel().getLevelFilename().c_str());
   if(!level.good())
     throw std::runtime_error("Cannot find level description file " + gameplay->getCurrentLevel().getLevelFilename());
-  buildLevel(_brickFactory, level, _world);
+  buildLevel(_brickFactory, level, _world._items);
   
   // Outside walls
-  _world.push_back(std::make_shared<Frame>(800, 600));
-
+  _world._items.push_back(std::make_shared<Frame>(800, 600));
+  
   // Paddle
-  _world.push_back(_paddle);
+  _world._items.push_back(_paddle);
   
   //sf::Mouse::setPosition(sf::Vector2i(400, 560), window);
 }
@@ -70,7 +70,7 @@ std::shared_ptr<Screen> GameScreen::onKey(const sf::Event::KeyEvent & key)
 
 std::shared_ptr<Screen> GameScreen::onFrame(sf::Time elapsed)
 {
-  if(_ball->update(elapsed, _world))
+  if(_ball->update(elapsed, _world._items))
   {
     // We got out of the screen, reduce the number of lives
     if(_gameplay->failure())
@@ -85,7 +85,7 @@ std::shared_ptr<Screen> GameScreen::onFrame(sf::Time elapsed)
       return nullptr;
     }
   }
-  else if(std::find_if(_world.begin(), _world.end(), [](auto && item) { return item->requiredToWin(); }) == _world.end())
+  else if(std::find_if(_world._items.begin(), _world._items.end(), [](auto && item) { return item->requiredToWin(); }) == _world._items.end())
   {
     // Success! Go to the next stage
     _gameplay->success();
@@ -101,9 +101,6 @@ std::shared_ptr<Screen> GameScreen::onFrame(sf::Time elapsed)
 void GameScreen::draw()
 {
   _window->draw(*_ball);
-  for(auto && item : _world)
-  {
-    item->draw(_window);
-  }
+  _window->draw(_world);
   _window->draw(*_lifes);
 }

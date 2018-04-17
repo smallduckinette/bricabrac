@@ -3,8 +3,8 @@
 
 #include "brickfactory.h"
 #include "screen.h"
+#include "world.h"
 
-#include <list>
 
 class Item;
 class Ball;
@@ -31,7 +31,7 @@ private:
   sf::RenderWindow * _window;
   
   BrickFactory _brickFactory;
-  std::list<std::shared_ptr<Item> > _world;
+  World _world;
   std::shared_ptr<Ball> _ball;
   std::shared_ptr<Paddle> _paddle;
   std::shared_ptr<Lifes> _lifes;

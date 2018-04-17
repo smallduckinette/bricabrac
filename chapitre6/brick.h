@@ -3,14 +3,12 @@
 
 #include <memory>
 
-#include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
 
 #include "item.h"
 #include "physics.h"
 
-class Brick : public sf::Sprite,
-              public Item
+class Brick : public Item
 {
 public:
   Brick(const sf::Texture & texture, int textureIndex, const std::shared_ptr<sf::Sound> & bing, int x, int y);
@@ -21,16 +19,12 @@ public:
   
   bool commitCollision() override;
   
-  void draw(sf::RenderWindow * window) override;
-  
   bool requiredToWin() const override;
   
 protected:
   void playSound();
   
 private:
-  int _x;
-  int _y;
   std::shared_ptr<sf::Sound> _bing;
 };
 
