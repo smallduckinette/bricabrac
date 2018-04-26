@@ -16,6 +16,8 @@ public:
   World(const World &) = delete;
   World & operator=(const World &) = delete;
   
+  void update(sf::Time elapsed);
+  
   void draw(sf::RenderTarget & target,
             sf::RenderStates states) const override;
   
