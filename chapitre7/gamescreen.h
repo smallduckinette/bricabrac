@@ -4,6 +4,7 @@
 #include "brickfactory.h"
 #include "screen.h"
 #include "world.h"
+#include "graphicsubsystem.h"
 
 
 class Item;
@@ -28,6 +29,8 @@ public:
   void draw() override;
   
 private:
+  void makeLevel();
+  
   sf::RenderWindow * _window;
   
   BrickFactory _brickFactory;
@@ -39,6 +42,10 @@ private:
   float _maxVelocity;
   float _acceleration;
   std::shared_ptr<Gameplay> _gameplay;
+  
+  EntityIdGenerator _entityIdGenerator;
+  
+  GraphicSubsystem _graphicSubsystem;
 };
 
 #endif

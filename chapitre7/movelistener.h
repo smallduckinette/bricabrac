@@ -9,7 +9,7 @@ class MoveListener
 {
 public:
   virtual ~MoveListener() = default;
-  virtual void onMove(EntityId entityId, const sf::Vector2f & position);
+  virtual void onMove(EntityId entityId, const sf::Vector2f & position) = 0;
 };
 
 #endif

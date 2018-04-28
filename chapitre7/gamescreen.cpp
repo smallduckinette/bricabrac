@@ -9,6 +9,7 @@
 #include "frame.h"
 #include "titlescreen.h"
 #include "gameplay.h"
+#include "spritedef.h"
 
 GameScreen::GameScreen(sf::RenderWindow * window,
                        float initialVelocity,
@@ -28,11 +29,13 @@ GameScreen::GameScreen(sf::RenderWindow * window,
 {
   _window->setMouseCursorVisible(false);
   
+  makeLevel();
+  
   // Bricks
-  std::ifstream level(gameplay->getCurrentLevel().getLevelFilename().c_str());
-  if(!level.good())
-    throw std::runtime_error("Cannot find level description file " + gameplay->getCurrentLevel().getLevelFilename());
-  buildLevel(_brickFactory, level, _world._items);
+  //std::ifstream level(gameplay->getCurrentLevel().getLevelFilename().c_str());
+  //if(!level.good())
+  //  throw std::runtime_error("Cannot find level description file " + gameplay->getCurrentLevel().getLevelFilename());
+  //buildLevel(_brickFactory, level, _world._items);
   
   // Outside walls
   _world._items.push_back(std::make_shared<Frame>(800, 600));
@@ -85,13 +88,13 @@ std::shared_ptr<Screen> GameScreen::onFrame(sf::Time elapsed)
       return nullptr;
     }
   }
-  else if(std::find_if(_world._items.begin(), _world._items.end(), [](auto && item) { return item->requiredToWin(); }) == _world._items.end())
-  {
-    // Success! Go to the next stage
-    _gameplay->success();
-    
-    return std::make_shared<GameScreen>(_window, _initialVelocity, _maxVelocity, _acceleration, _gameplay);
-  }
+  //else if(std::find_if(_world._items.begin(), _world._items.end(), [](auto && item) { return item->requiredToWin(); }) == _world._items.end())
+  //{
+  //  // Success! Go to the next stage
+  //  _gameplay->success();
+  //  
+  //  return std::make_shared<GameScreen>(_window, _initialVelocity, _maxVelocity, _acceleration, _gameplay);
+  //}
   else
   {
     return nullptr;
@@ -103,4 +106,39 @@ void GameScreen::draw()
   _window->draw(*_ball);
   _window->draw(_world);
   _window->draw(*_lifes);
+  
+  _window->draw(_graphicSubsystem);
+}
+
+void GameScreen::makeLevel()
+{
+  std::ifstream level(_gameplay->getCurrentLevel().getLevelFilename().c_str());
+  if(!level.good())
+    throw std::runtime_error("Cannot find level description file " + _gameplay->getCurrentLevel().getLevelFilename());
+  
+  int row = 0;
+  std::string line;
+  while(level.good())
+  {
+    std::getline(level, line, '\n');
+    int col = 0;
+    std::istringstream linestr(line);
+    std::for_each(std::istream_iterator<int>(linestr),
+                  std::istream_iterator<int>(),
+                  [&](int brickType)
+                  {
+                    if(brickType > 0)
+                    {
+                      EntityId entityId = _entityIdGenerator.generate();
+                      sf::Vector2f position(col * 50, row * 30 + 50);
+                      
+                      _graphicSubsystem.add(entityId,
+                                            SpriteDef("../resources/brick_sprite_sheet.png",
+                                                      sf::IntRect(0, (brickType - 1) * 30, 50, 30)),
+                                            position);
+                    }
+                    ++col;
+                  });
+    ++row;
+  }  
 }
