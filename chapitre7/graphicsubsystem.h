@@ -15,6 +15,10 @@ class GraphicSubsystem : public sf::Drawable,
                          public MoveListener
 {
 public:
+  GraphicSubsystem() = default;
+  GraphicSubsystem(const GraphicSubsystem &) = delete;
+  GraphicSubsystem & operator=(const GraphicSubsystem &) = delete;
+
   void add(EntityId entityId,
            const SpriteDef & spriteDef,
            const sf::Vector2f & position);

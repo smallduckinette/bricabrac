@@ -12,6 +12,10 @@
 class PhysicSubsystem
 {
 public:
+  PhysicSubsystem() = default;
+  PhysicSubsystem(const PhysicSubsystem &) = delete;
+  PhysicSubsystem & operator=(const PhysicSubsystem &) = delete;
+  
   void addObstacle(EntityId entityId, const Rectangle & obstacle);
   void addDynamic(EntityId entityId, const Disc & disc);
   

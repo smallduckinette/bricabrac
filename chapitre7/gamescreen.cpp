@@ -29,6 +29,13 @@ GameScreen::GameScreen(sf::RenderWindow * window,
 {
   _window->setMouseCursorVisible(false);
   
+  _physicSubsystem.onMove().connect(&_graphicSubsystem, &GraphicSubsystem::onMove);
+  
+  //                                  std::bind(&GraphicSubsystem::onMove,
+  //                                            &_graphicSubsystem,
+  //                                            std::placeholders::_1,
+  //                                            std::placeholders::_2));
+  
   makeLevel();
   
   // Bricks
@@ -73,6 +80,8 @@ std::shared_ptr<Screen> GameScreen::onKey(const sf::Event::KeyEvent & key)
 
 std::shared_ptr<Screen> GameScreen::onFrame(sf::Time elapsed)
 {
+  _physicSubsystem.simulate(elapsed);
+  
   if(_ball->update(elapsed, _world._items))
   {
     // We got out of the screen, reduce the number of lives
@@ -136,9 +145,10 @@ void GameScreen::makeLevel()
                                             SpriteDef("../resources/brick_sprite_sheet.png",
                                                       sf::IntRect(0, (brickType - 1) * 30, 50, 30)),
                                             position);
+                      _physicSubsystem.addObstacle(entityId, Rectangle(position, position + sf::Vector2f(50, 30)));
                     }
                     ++col;
                   });
     ++row;
-  }  
+  }
 }

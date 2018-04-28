@@ -5,6 +5,7 @@
 #include "screen.h"
 #include "world.h"
 #include "graphicsubsystem.h"
+#include "physicsubsystem.h"
 
 
 class Item;
@@ -46,6 +47,7 @@ private:
   EntityIdGenerator _entityIdGenerator;
   
   GraphicSubsystem _graphicSubsystem;
+  PhysicSubsystem _physicSubsystem;
 };
 
 #endif
