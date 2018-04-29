@@ -77,3 +77,38 @@ void PhysicSubsystem::simulate(sf::Time elapsed)
     _moveSignal.emit(changeOfPosition.first, changeOfPosition.second);
   }
 }
+
+void PhysicSubsystem::onMove(EntityId entityId, const sf::Vector2f & position)
+{
+  auto it = _dynamics.find(entityId);
+  if(it != _dynamics.end())
+  {
+    it->second._shape._position = position;
+  }
+  
+  auto it2 = _obstacles.find(entityId);
+  if(it2 != _obstacles.end())
+  {
+    it2->second.setPosition(position);
+  }
+}
+
+void PhysicSubsystem::setStatic(EntityId entityId)
+{
+  auto it = _dynamics.find(entityId);
+  if(it != _dynamics.end())
+  {
+    it->second._static = true;
+  }
+}
+
+void PhysicSubsystem::setDynamic(EntityId entityId, const sf::Vector2f & direction)
+{
+  auto it = _dynamics.find(entityId);
+  if(it != _dynamics.end())
+  {
+    it->second._direction = normalize(direction);
+    it->second._velocity = norm(direction);
+    it->second._static = false;
+  }
+}

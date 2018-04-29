@@ -8,8 +8,9 @@
 #include "signal.h"
 #include "physics.h"
 #include "entityid.h"
+#include "movelistener.h"
 
-class PhysicSubsystem
+class PhysicSubsystem : public MoveListener
 {
 public:
   PhysicSubsystem() = default;
@@ -19,10 +20,16 @@ public:
   void addObstacle(EntityId entityId, const Rectangle & obstacle);
   void addDynamic(EntityId entityId, const Disc & disc);
   
+  void setStatic(EntityId entityId);
+  void setDynamic(EntityId entityId, const sf::Vector2f & direction);
+  
   Signal<EntityId, EntityId> & onCollision();
   Signal<EntityId, sf::Vector2f> & onMove();
 
   void simulate(sf::Time elapsed);
+  
+  /// Implementation of MoveListener interface
+  void onMove(EntityId entityId, const sf::Vector2f & position) override;
   
 private:
   struct Dynamic

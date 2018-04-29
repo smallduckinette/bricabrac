@@ -43,6 +43,8 @@ public:
                            const sf::Vector2f & direction,
                            float velocity) const;
   
+  /// Move the center of the rectangle to the new position
+  void setPosition(const sf::Vector2f & position);
 private:  
   sf::Vector2f _min;
   sf::Vector2f _max;  

@@ -124,7 +124,8 @@ void GameScreen::makeLevel()
   std::ifstream level(_gameplay->getCurrentLevel().getLevelFilename().c_str());
   if(!level.good())
     throw std::runtime_error("Cannot find level description file " + _gameplay->getCurrentLevel().getLevelFilename());
-  
+
+  // Add bricks
   int row = 0;
   std::string line;
   while(level.good())
@@ -151,4 +152,13 @@ void GameScreen::makeLevel()
                   });
     ++row;
   }
+
+  // Add ball
+  EntityId ballId = _entityIdGenerator.generate();
+  sf::Vector2f ballPosition(50, 50);
+  _graphicSubsystem.add(ballId,
+                        SpriteDef("../resources/bille.png",
+                                  sf::IntRect(0, 0, 20, 20)),
+                        ballPosition);
+  _physicSubsystem.addDynamic(ballId, Disc(ballPosition, 10));
 }

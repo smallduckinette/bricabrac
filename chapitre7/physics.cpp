@@ -148,3 +148,10 @@ CollisionDataOpt Rectangle::testHit(const Disc & disc,
   
   return cd;
 }
+
+void Rectangle::setPosition(const sf::Vector2f & position)
+{
+  sf::Vector2f halfDiag = (_max - _min) * 0.5f;
+  _min = position - halfDiag;
+  _max = position + halfDiag;
+}
