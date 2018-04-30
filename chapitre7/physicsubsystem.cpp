@@ -1,9 +1,9 @@
 #include "physicsubsystem.h"
 
 
-void PhysicSubsystem::addObstacle(EntityId entityId, const Rectangle & rectangle)
+void PhysicSubsystem::addObstacle(EntityId entityId, const std::shared_ptr<Rectangle> & rectangle, bool round)
 {
-  _obstacles.insert({entityId, rectangle});
+  _obstacles.insert({entityId, Obstacle{rectangle, round}});
 }
 
 void PhysicSubsystem::addDynamic(EntityId entityId, const Disc & disc)
@@ -34,24 +34,40 @@ void PhysicSubsystem::simulate(sf::Time elapsed)
       while(residualVelocity > 0)
       {
         CollisionDataOpt bestCollision;
-        EntityId obstacleId(0);
+        EntityId bestObstacleId(0);
+        Obstacle * bestObstacle = nullptr;
         
         for(auto && obstacle : _obstacles)
         {
-          auto currentCollision = obstacle.second.testHit(dynamic.second._shape, dynamic.second._direction, residualVelocity);
+          auto currentCollision = obstacle.second._shape->testHit(dynamic.second._shape, dynamic.second._direction, residualVelocity);
           if(currentCollision && (!bestCollision || currentCollision > bestCollision))
           {
             bestCollision = currentCollision;
-            obstacleId = obstacle.first;
+            bestObstacleId = obstacle.first;
+            bestObstacle = &obstacle.second;
           }
         }
         
         if(bestCollision)
         {
+          assert(bestObstacle);
           dynamic.second._shape._position = bestCollision->_position;
-          dynamic.second._direction = bestCollision->_direction;
+          if(bestObstacle->_round)
+          {
+            // Override bouncing direction to simulate "round" objects such as the paddle
+            float angle = 3.14159265 *
+              (bestCollision->_position.x - bestObstacle->_shape->getPosition().x)
+              / bestObstacle->_shape->getWidth();
+            dynamic.second._direction = sf::Vector2f(std::sin(angle), -std::cos(angle));            
+          }
+          else
+          {
+            dynamic.second._direction = bestCollision->_direction;
+          }
           residualVelocity = bestCollision->_residualVelocity;
-          collisions.push_back({dynamic.first, obstacleId});
+
+          // Send collision signal
+          _collisionSignal.emit(dynamic.first, bestObstacleId);
         }
         else
         {
@@ -61,35 +77,45 @@ void PhysicSubsystem::simulate(sf::Time elapsed)
 
         if(residualVelocity == 0)
         {
-          changeOfPositions.push_back({dynamic.first, dynamic.second._direction});
+          // Send change of position signal
+          _moveSignal.emit(dynamic.first, dynamic.second._shape._position);
         }
       }
     }
   }
-  
-  // Raise the events when the simulation is complete
-  for(auto && collision : collisions)
+}
+
+void PhysicSubsystem::moveObstacle(EntityId entityId, const sf::Vector2f & position)
+{
+  auto it = _obstacles.find(entityId);
+  if(it != _obstacles.end())
   {
-    _collisionSignal.emit(collision.first, collision.second);
-  }
-  for(auto && changeOfPosition : changeOfPositions)
-  {
-    _moveSignal.emit(changeOfPosition.first, changeOfPosition.second);
+    it->second._shape->setPosition(position);
+    _moveSignal.emit(it->first, position);
   }
 }
 
-void PhysicSubsystem::onMove(EntityId entityId, const sf::Vector2f & position)
+void PhysicSubsystem::moveDynamic(EntityId entityId, const sf::Vector2f & position)
 {
   auto it = _dynamics.find(entityId);
   if(it != _dynamics.end())
   {
     it->second._shape._position = position;
+    _moveSignal.emit(it->first, position);
   }
-  
-  auto it2 = _obstacles.find(entityId);
-  if(it2 != _obstacles.end())
+}
+
+bool PhysicSubsystem::isStatic(EntityId entityId) const
+{
+  auto it = _dynamics.find(entityId);
+  if(it != _dynamics.end())
   {
-    it2->second.setPosition(position);
+    return it->second._static;
+  }
+  else
+  {
+    // Return any value
+    return false;
   }
 }
 

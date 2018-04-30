@@ -21,6 +21,7 @@ void GraphicSubsystem::add(EntityId entityId,
   sf::Sprite sprite(*result.first->second);
   sprite.setTextureRect(spriteDef._textureRect);
   sprite.setPosition(position);
+  sprite.setOrigin(spriteDef._origin);
   
   _sprites.insert({entityId, sprite});
 }

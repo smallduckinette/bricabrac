@@ -2,6 +2,7 @@
 #define __CHAPITRE7_PHYSICSUBSYSTEM_H__
 
 #include <map>
+#include <memory>
 
 #include <SFML/System/Time.hpp>
 
@@ -10,15 +11,20 @@
 #include "entityid.h"
 #include "movelistener.h"
 
-class PhysicSubsystem : public MoveListener
+class PhysicSubsystem
 {
 public:
   PhysicSubsystem() = default;
   PhysicSubsystem(const PhysicSubsystem &) = delete;
   PhysicSubsystem & operator=(const PhysicSubsystem &) = delete;
   
-  void addObstacle(EntityId entityId, const Rectangle & obstacle);
+  void addObstacle(EntityId entityId, const std::shared_ptr<Rectangle> & obstacle, bool round = false);
   void addDynamic(EntityId entityId, const Disc & disc);
+  
+  void moveObstacle(EntityId entityId, const sf::Vector2f & position);
+  void moveDynamic(EntityId entityId, const sf::Vector2f & position);
+  
+  bool isStatic(EntityId entityId) const;
   
   void setStatic(EntityId entityId);
   void setDynamic(EntityId entityId, const sf::Vector2f & direction);
@@ -27,11 +33,14 @@ public:
   Signal<EntityId, sf::Vector2f> & onMove();
 
   void simulate(sf::Time elapsed);
-  
-  /// Implementation of MoveListener interface
-  void onMove(EntityId entityId, const sf::Vector2f & position) override;
-  
+    
 private:
+  struct Obstacle
+  {
+    std::shared_ptr<Rectangle> _shape;
+    bool _round;
+  };
+  
   struct Dynamic
   {
     Disc _shape;
@@ -43,7 +52,7 @@ private:
   Signal<EntityId, EntityId> _collisionSignal;
   Signal<EntityId, sf::Vector2f> _moveSignal;
   
-  std::map<EntityId, Rectangle> _obstacles;
+  std::map<EntityId, Obstacle> _obstacles;
   std::map<EntityId, Dynamic> _dynamics;
 };
 

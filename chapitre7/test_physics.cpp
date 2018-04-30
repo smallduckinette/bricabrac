@@ -7,7 +7,7 @@ BOOST_AUTO_TEST_SUITE(Physics)
 
 BOOST_AUTO_TEST_CASE(testRectangleCollisionsFromTop)
 {
-  Rectangle r(sf::Vector2f(0, 0), sf::Vector2f(5, 3));
+  OutsideRectangle r(sf::Vector2f(0, 0), sf::Vector2f(5, 3));
   
   // Hit straight down
   CollisionDataOpt c1 = r.testHit(Disc(sf::Vector2f(2, 6), 1),
@@ -32,7 +32,7 @@ BOOST_AUTO_TEST_CASE(testRectangleCollisionsFromTop)
 
 BOOST_AUTO_TEST_CASE(testRectangleCollisionsFromBottom)
 {
-  Rectangle r(sf::Vector2f(0, 0), sf::Vector2f(5, 3));
+  OutsideRectangle r(sf::Vector2f(0, 0), sf::Vector2f(5, 3));
   
   // Hit straight up
   CollisionDataOpt c1 = r.testHit(Disc(sf::Vector2f(2, -2), 1),
@@ -59,7 +59,7 @@ BOOST_AUTO_TEST_CASE(testRectangleCollisionsFromBottom)
 
 BOOST_AUTO_TEST_CASE(testRectangleCollisionsCorners)
 {
-  Rectangle r(sf::Vector2f(0, 0), sf::Vector2f(5, 3));
+  OutsideRectangle r(sf::Vector2f(0, 0), sf::Vector2f(5, 3));
   
   // Hit from bottom left toward top right
   CollisionDataOpt c1 = r.testHit(Disc(sf::Vector2f(-2, -2), 1),
@@ -105,7 +105,7 @@ BOOST_AUTO_TEST_CASE(testRectangleCollisionsCorners)
 
 BOOST_AUTO_TEST_CASE(testRectangleCollisionsComplexCorners)
 {
-  Rectangle r(sf::Vector2f(0, 0), sf::Vector2f(5, 3));
+  OutsideRectangle r(sf::Vector2f(0, 0), sf::Vector2f(5, 3));
 
   // We're going stright left, and are located slightly lower than the rectangle
   CollisionDataOpt c1 = r.testHit(Disc(sf::Vector2f(7, -0.5), 1),

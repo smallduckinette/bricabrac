@@ -1,7 +1,6 @@
 #ifndef __CHAPITRE5_GAMESCREEN_H__
 #define __CHAPITRE5_GAMESCREEN_H__
 
-#include "brickfactory.h"
 #include "screen.h"
 #include "world.h"
 #include "graphicsubsystem.h"
@@ -9,8 +8,6 @@
 
 
 class Item;
-class Ball;
-class Paddle;
 class Lifes;
 class Gameplay;
 
@@ -34,17 +31,15 @@ private:
   
   sf::RenderWindow * _window;
   
-  BrickFactory _brickFactory;
   World _world;
-  std::shared_ptr<Ball> _ball;
-  std::shared_ptr<Paddle> _paddle;
   std::shared_ptr<Lifes> _lifes;
   float _initialVelocity;
   float _maxVelocity;
   float _acceleration;
   std::shared_ptr<Gameplay> _gameplay;
-  
   EntityIdGenerator _entityIdGenerator;
+  EntityId _paddleId;
+  EntityId _ballId;
   
   GraphicSubsystem _graphicSubsystem;
   PhysicSubsystem _physicSubsystem;

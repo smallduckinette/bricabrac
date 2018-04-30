@@ -96,9 +96,31 @@ Rectangle::Rectangle(const sf::Vector2f & m1,
 {
 }
 
-CollisionDataOpt Rectangle::testHit(const Disc & disc,
-                                    const sf::Vector2f & direction,
-                                    float velocity) const
+void Rectangle::setPosition(const sf::Vector2f & position)
+{
+  sf::Vector2f halfDiag = (_max - _min) * 0.5f;
+  _min = position - halfDiag;
+  _max = position + halfDiag;
+}
+
+sf::Vector2f Rectangle::getPosition() const
+{
+  return (_max - _min) * 0.5f + _min;
+}
+
+float Rectangle::getWidth() const
+{
+  return _max.x - _min.x;
+}
+
+float Rectangle::getHeight() const
+{
+  return _max.y - _min.y;
+}
+
+CollisionDataOpt OutsideRectangle::testHit(const Disc & disc,
+                                           const sf::Vector2f & direction,
+                                           float velocity) const
 {
   CollisionDataOpt cd;
   if(direction.x != 0)
@@ -147,11 +169,4 @@ CollisionDataOpt Rectangle::testHit(const Disc & disc,
   }  
   
   return cd;
-}
-
-void Rectangle::setPosition(const sf::Vector2f & position)
-{
-  sf::Vector2f halfDiag = (_max - _min) * 0.5f;
-  _min = position - halfDiag;
-  _max = position + halfDiag;
 }
