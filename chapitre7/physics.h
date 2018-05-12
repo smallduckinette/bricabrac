@@ -66,9 +66,18 @@ class OutsideRectangle : public Rectangle
 public:
   using Rectangle::Rectangle;
   
-  virtual CollisionDataOpt testHit(const Disc & disc,
-                                   const sf::Vector2f & direction,
-                                   float velocity) const;
+  CollisionDataOpt testHit(const Disc & disc,
+                           const sf::Vector2f & direction,
+                           float velocity) const override;
+};
+
+class InsideRectangle : public Rectangle
+{
+  using Rectangle::Rectangle;
+
+  CollisionDataOpt testHit(const Disc & disc,
+                           const sf::Vector2f & direction,
+                           float velocity) const override;
 };
 
 #endif

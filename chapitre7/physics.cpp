@@ -170,3 +170,32 @@ CollisionDataOpt OutsideRectangle::testHit(const Disc & disc,
   
   return cd;
 }
+
+CollisionDataOpt InsideRectangle::testHit(const Disc & disc,
+                                          const sf::Vector2f & direction,
+                                          float velocity) const
+{
+  CollisionDataOpt cd;
+  if(direction.x != 0)
+  {
+    // Test against the left wall if we are going left,
+    // or against the right wall if we are going right
+    cd = cd ^ physics::testVerticalHit((direction.x < 0) ? (_min.x + disc._radius) : (_max.x - disc._radius),
+                                       _min.y, _max.y,
+                                       disc._position,
+                                       direction,
+                                       velocity);
+  }
+  if(direction.y != 0)
+  {
+    // Test against the top wall if we are going down,
+    // or against the bottom wall if we are going up
+    cd = cd ^ physics::testHorizontalHit((direction.y < 0) ? (_min.y + disc._radius) : (_max.y - disc._radius),
+                                         _min.x, _max.x,
+                                         disc._position,
+                                         direction,
+                                         velocity);
+  }
+  
+  return cd;
+}

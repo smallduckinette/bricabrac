@@ -133,6 +133,11 @@ void GameScreen::makeLevel()
                   });
     ++row;
   }
+
+  // Add surrounding walls
+  _physicSubsystem.addObstacle(_entityIdGenerator.generate(),
+                               std::make_shared<InsideRectangle>(sf::Vector2f(0, 0),
+                                                                 sf::Vector2f(800, 1000)));
   
   // Add ball
   sf::Vector2f ballPosition(50, 50);
