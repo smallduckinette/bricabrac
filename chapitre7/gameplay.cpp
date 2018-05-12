@@ -91,12 +91,12 @@ bool Gameplay::failure()
 {
   if(_lives == 0)
   {
-    return false;
+    return true;
   }
   else
   {
     --_lives;
-    return true;
+    return false;
   }
 }
 

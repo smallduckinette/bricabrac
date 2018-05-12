@@ -11,7 +11,8 @@ class Item;
 class Lifes;
 class Gameplay;
 
-class GameScreen : public Screen
+class GameScreen : public Screen,
+                   public MoveListener
 {
 public:
   GameScreen(sf::RenderWindow * window,
@@ -27,6 +28,8 @@ public:
   void draw() override;
   
 private:
+  void onMove(EntityId entityId, const sf::Vector2f & position) override;
+  
   void makeLevel();
   
   sf::RenderWindow * _window;
@@ -40,6 +43,14 @@ private:
   EntityIdGenerator _entityIdGenerator;
   EntityId _paddleId;
   EntityId _ballId;
+  int _mouseX;
+
+  enum Status
+    {
+      RUNNING,
+      FAIL,
+      SUCCESS
+    } _status;
   
   GraphicSubsystem _graphicSubsystem;
   PhysicSubsystem _physicSubsystem;

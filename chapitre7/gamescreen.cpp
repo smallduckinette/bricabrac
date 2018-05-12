@@ -20,17 +20,21 @@ GameScreen::GameScreen(sf::RenderWindow * window,
   _acceleration(acceleration),
   _gameplay(gameplay),
   _paddleId(_entityIdGenerator.generate()),
-  _ballId(_entityIdGenerator.generate())
+  _ballId(_entityIdGenerator.generate()),
+  _mouseX(350),
+  _status(RUNNING)
 {
   _window->setMouseCursorVisible(false);
   
   _physicSubsystem.onMove().connect(&_graphicSubsystem, &GraphicSubsystem::onMove);
+  _physicSubsystem.onMove().connect(this, &GameScreen::onMove);
   
   makeLevel();
 }
 
 std::shared_ptr<Screen> GameScreen::onMouseMove(int x, int)
 {
+  _mouseX = x;
   _physicSubsystem.moveObstacle(_paddleId, sf::Vector2f(x, 560));
 
   if(_physicSubsystem.isStatic(_ballId))
@@ -61,34 +65,22 @@ std::shared_ptr<Screen> GameScreen::onKey(const sf::Event::KeyEvent & key)
 
 std::shared_ptr<Screen> GameScreen::onFrame(sf::Time elapsed)
 {
-  _physicSubsystem.simulate(elapsed);
-  
-  //if(_ball->update(elapsed, _world._items))
-  //{
-  //  // We got out of the screen, reduce the number of lives
-  //  if(_gameplay->failure())
-  //  {
-  //    // We ran out of lifes, reset the game
-  //    return std::make_shared<GameScreen>(_window, _initialVelocity, _maxVelocity, _acceleration, _gameplay);
-  //  }
-  //  else
-  //  {
-  //    // Reset ball position and carry on playing
-  //    _ball->reset(_paddle->getPosition() - sf::Vector2f(0, 10));
-  //    return nullptr;
-  //  }
-  //}
-  //else if(std::find_if(_world._items.begin(), _world._items.end(), [](auto && item) { return item->requiredToWin(); }) == _world._items.end())
-  //{
-  //  // Success! Go to the next stage
-  //  _gameplay->success();
-  //  
-  //  return std::make_shared<GameScreen>(_window, _initialVelocity, _maxVelocity, _acceleration, _gameplay);
-  //}
-  //else
-  //{
-  return nullptr;
-  //}
+  if(_status == FAIL)
+  {
+    // We ran out of lifes, reset the game
+    return std::make_shared<TitleScreen>(_window);
+  }
+  else if(_status == SUCCESS)
+  {
+    // Success! Go to the next stage
+    return std::make_shared<GameScreen>(_window, _initialVelocity, _maxVelocity, _acceleration, _gameplay);
+  }
+  else
+  {
+    // Status is RUNNING
+    _physicSubsystem.simulate(elapsed);
+    return nullptr;
+  }
 }
 
 void GameScreen::draw()
@@ -96,6 +88,22 @@ void GameScreen::draw()
   //_window->draw(*_lifes);
   
   _window->draw(_graphicSubsystem);
+}
+
+void GameScreen::onMove(EntityId entityId, const sf::Vector2f & position)
+{
+  if(entityId == _ballId && position.y > 650)
+  {
+    if(_gameplay->failure())
+    {
+      _status = FAIL;
+    }
+    else
+    {
+      _physicSubsystem.setStatic(_ballId);
+      _physicSubsystem.moveDynamic(_ballId, sf::Vector2f(_mouseX, 540));
+    }
+  }
 }
 
 void GameScreen::makeLevel()
@@ -149,7 +157,7 @@ void GameScreen::makeLevel()
   _physicSubsystem.addDynamic(_ballId, Disc(ballPosition, 10));
   
   // Add paddle
-  sf::Vector2f paddlePosition(350, 560);
+  sf::Vector2f paddlePosition(_mouseX, 560);
   _graphicSubsystem.add(_paddleId,
                         SpriteDef("../resources/plateau.png",
                                   sf::IntRect(0, 0, 60, 20),
@@ -160,4 +168,5 @@ void GameScreen::makeLevel()
                                                                   paddlePosition + sf::Vector2f(30, 10)),
                                true);
   
+  onMouseMove(_mouseX, 0);
 }
