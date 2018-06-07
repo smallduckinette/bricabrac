@@ -29,7 +29,7 @@ public:
   void setStatic(EntityId entityId);
   void setDynamic(EntityId entityId, const sf::Vector2f & direction);
   
-  Signal<EntityId, EntityId> & onCollision();
+  Signal<EntityId, EntityId, sf::Vector2f> & onCollision();
   Signal<EntityId, sf::Vector2f> & onMove();
 
   void simulate(sf::Time elapsed);
@@ -49,7 +49,7 @@ private:
     bool _static;
   };
   
-  Signal<EntityId, EntityId> _collisionSignal;
+  Signal<EntityId, EntityId, sf::Vector2f> _collisionSignal;
   Signal<EntityId, sf::Vector2f> _moveSignal;
   
   std::map<EntityId, Obstacle> _obstacles;

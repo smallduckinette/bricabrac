@@ -11,7 +11,7 @@ void PhysicSubsystem::addDynamic(EntityId entityId, const Disc & disc)
   _dynamics.insert({entityId, Dynamic{disc, sf::Vector2f(0, 0), 0, true}});
 }
 
-Signal<EntityId, EntityId> & PhysicSubsystem::onCollision()
+Signal<EntityId, EntityId, sf::Vector2f> & PhysicSubsystem::onCollision()
 {
   return _collisionSignal;
 }
@@ -65,9 +65,9 @@ void PhysicSubsystem::simulate(sf::Time elapsed)
             dynamic.second._direction = bestCollision->_direction;
           }
           residualVelocity = bestCollision->_residualVelocity;
-
+          
           // Send collision signal
-          _collisionSignal.emit(dynamic.first, bestObstacleId);
+          _collisionSignal.emit(dynamic.first, bestObstacleId, bestCollision->_position);
         }
         else
         {

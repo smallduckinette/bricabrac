@@ -29,6 +29,8 @@ GameScreen::GameScreen(sf::RenderWindow * window,
   _physicSubsystem.onMove().connect(&_graphicSubsystem, &GraphicSubsystem::onMove);
   _physicSubsystem.onMove().connect(this, &GameScreen::onMove);
   
+  _physicSubsystem.onCollision().connect(&_soundSubsystem, &SoundSubsystem::onCollision);
+  
   makeLevel();
 }
 

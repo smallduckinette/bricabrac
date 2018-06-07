@@ -5,6 +5,7 @@
 #include "world.h"
 #include "graphicsubsystem.h"
 #include "physicsubsystem.h"
+#include "soundsubsystem.h"
 
 
 class Item;
@@ -54,6 +55,7 @@ private:
   
   GraphicSubsystem _graphicSubsystem;
   PhysicSubsystem _physicSubsystem;
+  SoundSubsystem _soundSubsystem;
 };
 
 #endif

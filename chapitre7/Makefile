@@ -14,7 +14,7 @@ UTEST_OBJS = $(UTEST_SRCS:.cpp=.o)
 
 # Library
 LIB    = libbab.a
-SRCS   = collisiondata.cpp frame.cpp gameplay.cpp gamescreen.cpp graphicsubsystem.cpp guiscreen.cpp leveldescription.cpp lifes.cpp physics.cpp physicsubsystem.cpp powerbrick.cpp screen.cpp titlescreen.cpp vector.cpp world.cpp
+SRCS   = collisiondata.cpp frame.cpp gameplay.cpp gamescreen.cpp graphicsubsystem.cpp guiscreen.cpp leveldescription.cpp lifes.cpp physics.cpp physicsubsystem.cpp powerbrick.cpp screen.cpp soundsubsystem.cpp titlescreen.cpp vector.cpp world.cpp
 OBJS   = $(SRCS:.cpp=.o)
 
 # Dependencies
