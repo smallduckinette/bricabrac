@@ -1,0 +1,8 @@
+{
+    "sounds":
+    [
+        {"material1": "Ball", "material2": "Brick", "sound":"../resources/bing.flac"},
+        {"material1": "Ball", "material2": "Paddle", "sound":"../resources/bong.flac"},
+        {"material1": "Ball", "material2": "Wall", "sound":"../resources/bing.flac"}
+    ]
+}

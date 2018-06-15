@@ -2,6 +2,7 @@
 #define __CHAPITRE7_SOUNDSUBSYSTEM_H__
 
 #include <map>
+#include <boost/property_tree/ptree.hpp>
 
 #include <SFML/Audio.hpp>
 
@@ -10,7 +11,7 @@
 class SoundSubsystem
 {
 public:
-  SoundSubsystem() = default;
+  SoundSubsystem(const boost::property_tree::ptree & config);
   SoundSubsystem(const SoundSubsystem &) = delete;
   SoundSubsystem & operator=(const SoundSubsystem &) = delete;
   
@@ -18,17 +19,20 @@ public:
     {
       Ball,
       Brick,
-      Paddle
+      Paddle,
+      Wall
     };
   
-  void addEntity(EntityId entity, Material material);
+  void add(EntityId entity, Material material);
   
   void onCollision(EntityId entity1, EntityId entity2, const sf::Vector2f & position);
   
 private:
+  Material parseMaterial(const std::string & value) const;
+  
   // Each material pair makes a particular sound (like, metal on wood). By convention,
   // the first material is the lowest.
-  std::vector<sf::SoundBuffer> _soundBuffers;
+  std::vector<std::shared_ptr<sf::SoundBuffer> > _soundBuffers;
   std::map<std::pair<Material, Material>, sf::Sound> _sounds;
   
   // Each entity is made of a certain material

@@ -12,17 +12,20 @@ GameScreen::GameScreen(sf::RenderWindow * window,
                        float initialVelocity,
                        float maxVelocity,
                        float acceleration,
-                       const std::shared_ptr<Gameplay> & gameplay):
+                       const std::shared_ptr<Gameplay> & gameplay,
+                       const boost::property_tree::ptree & config):
   _window(window),
   _lifes(std::make_shared<Lifes>(gameplay)),
   _initialVelocity(initialVelocity),
   _maxVelocity(maxVelocity),
   _acceleration(acceleration),
   _gameplay(gameplay),
+  _config(config),
   _paddleId(_entityIdGenerator.generate()),
   _ballId(_entityIdGenerator.generate()),
   _mouseX(350),
-  _status(RUNNING)
+  _status(RUNNING),
+  _soundSubsystem(config.get_child("sounds"))
 {
   _window->setMouseCursorVisible(false);
   
@@ -75,7 +78,7 @@ std::shared_ptr<Screen> GameScreen::onFrame(sf::Time elapsed)
   else if(_status == SUCCESS)
   {
     // Success! Go to the next stage
-    return std::make_shared<GameScreen>(_window, _initialVelocity, _maxVelocity, _acceleration, _gameplay);
+    return std::make_shared<GameScreen>(_window, _initialVelocity, _maxVelocity, _acceleration, _gameplay, _config);
   }
   else
   {
@@ -138,6 +141,8 @@ void GameScreen::makeLevel()
                       _physicSubsystem.addObstacle(entityId,
                                                    std::make_shared<OutsideRectangle>(position,
                                                                                       position + sf::Vector2f(50, 30)));
+                      _soundSubsystem.add(entityId,
+                                          SoundSubsystem::Brick);
                     }
                     ++col;
                   });
@@ -145,9 +150,11 @@ void GameScreen::makeLevel()
   }
 
   // Add surrounding walls
-  _physicSubsystem.addObstacle(_entityIdGenerator.generate(),
+  EntityId wallId = _entityIdGenerator.generate();
+  _physicSubsystem.addObstacle(wallId,
                                std::make_shared<InsideRectangle>(sf::Vector2f(0, 0),
                                                                  sf::Vector2f(800, 1000)));
+  _soundSubsystem.add(wallId, SoundSubsystem::Wall);
   
   // Add ball
   sf::Vector2f ballPosition(50, 50);
@@ -157,6 +164,7 @@ void GameScreen::makeLevel()
                                   sf::Vector2f(10, 10)),
                         ballPosition);
   _physicSubsystem.addDynamic(_ballId, Disc(ballPosition, 10));
+  _soundSubsystem.add(_ballId, SoundSubsystem::Ball);
   
   // Add paddle
   sf::Vector2f paddlePosition(_mouseX, 560);
@@ -169,6 +177,7 @@ void GameScreen::makeLevel()
                                std::make_shared<OutsideRectangle>(paddlePosition + sf::Vector2f(-30, -10),
                                                                   paddlePosition + sf::Vector2f(30, 10)),
                                true);
+  _soundSubsystem.add(_paddleId, SoundSubsystem::Paddle);
   
   onMouseMove(_mouseX, 0);
 }

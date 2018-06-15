@@ -1,6 +1,8 @@
 #ifndef __CHAPITRE5_TITLESCREEN_H__
 #define __CHAPITRE5_TITLESCREEN_H__
 
+#include <boost/property_tree/ptree.hpp>
+
 #include "guiscreen.h"
 
 class TitleScreen : public GuiScreen
@@ -12,6 +14,8 @@ public:
   std::shared_ptr<Screen> onKey(const sf::Event::KeyEvent & key) override;
 
 private:
+  boost::property_tree::ptree _config;
+  
   int _easy;
   int _medium;
   int _hard;

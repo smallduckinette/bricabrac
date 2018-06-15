@@ -1,11 +1,17 @@
 #include "titlescreen.h"
 
+#include <fstream>
+#include <boost/property_tree/json_parser.hpp>
+
 #include "gamescreen.h"
 #include "gameplay.h"
 
 TitleScreen::TitleScreen(sf::RenderWindow * window):
   GuiScreen(window)
 {
+  std::ifstream configFile("../resources/config.json");
+  boost::property_tree::json_parser::read_json(configFile, _config);
+  
   _window->setMouseCursorVisible(true);
   
   addBackground("../resources/title.png");
@@ -24,15 +30,15 @@ std::shared_ptr<Screen> TitleScreen::onMouseClick(sf::Mouse::Button, int x, int 
 {
   if(hit(x, y, _easy))
   {
-    return std::make_shared<GameScreen>(_window, 200, 300, 1, makeGameplay("../resources/gameplay.json"));
+    return std::make_shared<GameScreen>(_window, 200, 300, 1, makeGameplay("../resources/gameplay.json"), _config);
   }
   else if(hit(x, y, _medium))
   {
-    return std::make_shared<GameScreen>(_window, 300, 600, 1, makeGameplay("../resources/gameplay.json"));
+    return std::make_shared<GameScreen>(_window, 300, 600, 1, makeGameplay("../resources/gameplay.json"), _config);
   }
   else if(hit(x, y, _hard))
   {
-    return std::make_shared<GameScreen>(_window, 300, 800, 2, makeGameplay("../resources/gameplay.json"));
+    return std::make_shared<GameScreen>(_window, 300, 800, 2, makeGameplay("../resources/gameplay.json"), _config);
   }
   else
   {

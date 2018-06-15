@@ -7,6 +7,7 @@
 #include "physicsubsystem.h"
 #include "soundsubsystem.h"
 
+#include <boost/property_tree/ptree.hpp>
 
 class Item;
 class Lifes;
@@ -20,7 +21,8 @@ public:
              float initialVelocity,
              float maxVelocity,
              float acceleration,
-             const std::shared_ptr<Gameplay> & gameplay);
+             const std::shared_ptr<Gameplay> & gameplay,
+             const boost::property_tree::ptree & config);
   
   std::shared_ptr<Screen> onMouseMove(int x, int y) override;
   std::shared_ptr<Screen> onMouseClick(sf::Mouse::Button, int x, int y);
@@ -41,6 +43,7 @@ private:
   float _maxVelocity;
   float _acceleration;
   std::shared_ptr<Gameplay> _gameplay;
+  const boost::property_tree::ptree & _config;
   EntityIdGenerator _entityIdGenerator;
   EntityId _paddleId;
   EntityId _ballId;
