@@ -29,6 +29,9 @@ public:
   
   /// Implementation of the MoveListener interface
   void onMove(EntityId entityId, const sf::Vector2f & position) override;
+
+  /// Destruction of an entity
+  void onDestroy(EntityId entityId);
   
 private:
   std::map<EntityId, sf::Sprite> _sprites;

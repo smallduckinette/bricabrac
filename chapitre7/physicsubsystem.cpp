@@ -1,9 +1,11 @@
 #include "physicsubsystem.h"
 
 
-void PhysicSubsystem::addObstacle(EntityId entityId, const std::shared_ptr<Rectangle> & rectangle, bool round)
+void PhysicSubsystem::addObstacle(EntityId entityId, const std::shared_ptr<Rectangle> & rectangle,
+                                  bool round,
+                                  int resistance)
 {
-  _obstacles.insert({entityId, Obstacle{rectangle, round}});
+  _obstacles.insert({entityId, Obstacle{rectangle, round, resistance}});
 }
 
 void PhysicSubsystem::addDynamic(EntityId entityId, const Disc & disc)
@@ -19,6 +21,11 @@ Signal<EntityId, EntityId, sf::Vector2f> & PhysicSubsystem::onCollision()
 Signal<EntityId, sf::Vector2f> & PhysicSubsystem::onMove()
 {
   return _moveSignal;
+}
+
+Signal<EntityId> & PhysicSubsystem::onDestroy()
+{
+  return _destroySignal;
 }
 
 void PhysicSubsystem::simulate(sf::Time elapsed)
@@ -68,6 +75,17 @@ void PhysicSubsystem::simulate(sf::Time elapsed)
           
           // Send collision signal
           _collisionSignal.emit(dynamic.first, bestObstacleId, bestCollision->_position);
+
+          // If obstacle is destructible, check if it should be destroyed
+          if(bestObstacle->_resistance > 1)
+          {
+            --bestObstacle->_resistance;
+          }
+          else if(bestObstacle->_resistance == 1)
+          {
+            _destroySignal.emit(bestObstacleId);
+            _obstacles.erase(bestObstacleId);
+          }
         }
         else
         {

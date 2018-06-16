@@ -34,6 +34,9 @@ GameScreen::GameScreen(sf::RenderWindow * window,
   
   _physicSubsystem.onCollision().connect(&_soundSubsystem, &SoundSubsystem::onCollision);
   
+  _physicSubsystem.onDestroy().connect(&_graphicSubsystem, &GraphicSubsystem::onDestroy);
+  _physicSubsystem.onDestroy().connect(&_soundSubsystem, &SoundSubsystem::onDestroy);
+  
   makeLevel();
 }
 
@@ -140,7 +143,9 @@ void GameScreen::makeLevel()
                                             position);
                       _physicSubsystem.addObstacle(entityId,
                                                    std::make_shared<OutsideRectangle>(position,
-                                                                                      position + sf::Vector2f(50, 30)));
+                                                                                      position + sf::Vector2f(50, 30)),
+                                                   false,
+                                                   brickType == 5 ? 3 : 1);
                       _soundSubsystem.add(entityId,
                                           SoundSubsystem::Brick);
                     }
@@ -153,7 +158,9 @@ void GameScreen::makeLevel()
   EntityId wallId = _entityIdGenerator.generate();
   _physicSubsystem.addObstacle(wallId,
                                std::make_shared<InsideRectangle>(sf::Vector2f(0, 0),
-                                                                 sf::Vector2f(800, 1000)));
+                                                                 sf::Vector2f(800, 1000)),
+                               false,
+                               0);
   _soundSubsystem.add(wallId, SoundSubsystem::Wall);
   
   // Add ball
@@ -176,7 +183,8 @@ void GameScreen::makeLevel()
   _physicSubsystem.addObstacle(_paddleId,
                                std::make_shared<OutsideRectangle>(paddlePosition + sf::Vector2f(-30, -10),
                                                                   paddlePosition + sf::Vector2f(30, 10)),
-                               true);
+                               true,
+                               0);
   _soundSubsystem.add(_paddleId, SoundSubsystem::Paddle);
   
   onMouseMove(_mouseX, 0);

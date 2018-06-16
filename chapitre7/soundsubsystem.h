@@ -27,6 +27,8 @@ public:
   
   void onCollision(EntityId entity1, EntityId entity2, const sf::Vector2f & position);
   
+  void onDestroy(EntityId entityId);
+  
 private:
   Material parseMaterial(const std::string & value) const;
   

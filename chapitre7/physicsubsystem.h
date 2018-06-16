@@ -18,7 +18,10 @@ public:
   PhysicSubsystem(const PhysicSubsystem &) = delete;
   PhysicSubsystem & operator=(const PhysicSubsystem &) = delete;
   
-  void addObstacle(EntityId entityId, const std::shared_ptr<Rectangle> & obstacle, bool round = false);
+  void addObstacle(EntityId entityId,
+                   const std::shared_ptr<Rectangle> & obstacle,
+                   bool round,
+                   int resistance);
   void addDynamic(EntityId entityId, const Disc & disc);
   
   void moveObstacle(EntityId entityId, const sf::Vector2f & position);
@@ -31,14 +34,16 @@ public:
   
   Signal<EntityId, EntityId, sf::Vector2f> & onCollision();
   Signal<EntityId, sf::Vector2f> & onMove();
-
+  Signal<EntityId> & onDestroy();
+  
   void simulate(sf::Time elapsed);
-    
+  
 private:
   struct Obstacle
   {
     std::shared_ptr<Rectangle> _shape;
     bool _round;
+    int _resistance;
   };
   
   struct Dynamic
@@ -51,6 +56,7 @@ private:
   
   Signal<EntityId, EntityId, sf::Vector2f> _collisionSignal;
   Signal<EntityId, sf::Vector2f> _moveSignal;
+  Signal<EntityId> _destroySignal;
   
   std::map<EntityId, Obstacle> _obstacles;
   std::map<EntityId, Dynamic> _dynamics;

@@ -47,6 +47,11 @@ void SoundSubsystem::onCollision(EntityId entity1, EntityId entity2, const sf::V
   }
 }
 
+void SoundSubsystem::onDestroy(EntityId entityId)
+{
+  _entityMaterials.erase(entityId);
+}
+
 SoundSubsystem::Material SoundSubsystem::parseMaterial(const std::string & value) const
 {
   if(value == "Ball")

@@ -41,3 +41,8 @@ void GraphicSubsystem::onMove(EntityId entityId, const sf::Vector2f & position)
   if(it != _sprites.end())
     it->second.setPosition(position);
 }
+
+void GraphicSubsystem::onDestroy(EntityId entityId)
+{
+  _sprites.erase(entityId);
+}
