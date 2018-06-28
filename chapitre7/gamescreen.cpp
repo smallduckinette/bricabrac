@@ -96,7 +96,7 @@ std::shared_ptr<Screen> GameScreen::onFrame(sf::Time elapsed)
 
 void GameScreen::draw()
 {
-  //_window->draw(*_lifes);
+  _window->draw(*_lifes);
   
   _window->draw(_graphicSubsystem);
 }

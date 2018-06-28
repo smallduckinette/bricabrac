@@ -11,7 +11,6 @@ Lifes::Lifes(const std::shared_ptr<Gameplay> & gameplay):
   _texture.setSmooth(true);
   
   _sprite->setTexture(_texture);
-  _sprite->setScale(sf::Vector2f(0.5, 0.5));
 }
   
 void Lifes::draw(sf::RenderTarget & target, sf::RenderStates states) const
