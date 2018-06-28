@@ -37,6 +37,8 @@ GameScreen::GameScreen(sf::RenderWindow * window,
   _physicSubsystem.onDestroy().connect(&_graphicSubsystem, &GraphicSubsystem::onDestroy);
   _physicSubsystem.onDestroy().connect(&_soundSubsystem, &SoundSubsystem::onDestroy);
   
+  _physicSubsystem.onDestroy().connect(this, &GameScreen::onDestroy);
+  
   makeLevel();
 }
 
@@ -78,9 +80,10 @@ std::shared_ptr<Screen> GameScreen::onFrame(sf::Time elapsed)
     // We ran out of lifes, reset the game
     return std::make_shared<TitleScreen>(_window);
   }
-  else if(_status == SUCCESS)
+  else if(_entitiesToDelete.empty())
   {
     // Success! Go to the next stage
+    _gameplay->success();
     return std::make_shared<GameScreen>(_window, _initialVelocity, _maxVelocity, _acceleration, _gameplay, _config);
   }
   else
@@ -114,6 +117,11 @@ void GameScreen::onMove(EntityId entityId, const sf::Vector2f & position)
   }
 }
 
+void GameScreen::onDestroy(EntityId entityId)
+{
+  _entitiesToDelete.erase(entityId);
+}
+
 void GameScreen::makeLevel()
 {
   std::ifstream level(_gameplay->getCurrentLevel().getLevelFilename().c_str());
@@ -135,6 +143,7 @@ void GameScreen::makeLevel()
                     if(brickType > 0)
                     {
                       EntityId entityId = _entityIdGenerator.generate();
+                      _entitiesToDelete.insert(entityId);
                       sf::Vector2f position(col * 50, row * 30 + 50);
                       
                       _graphicSubsystem.add(entityId,

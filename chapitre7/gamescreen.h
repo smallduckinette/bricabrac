@@ -32,6 +32,7 @@ public:
   
 private:
   void onMove(EntityId entityId, const sf::Vector2f & position) override;
+  void onDestroy(EntityId entityId);
   
   void makeLevel();
   
@@ -43,7 +44,7 @@ private:
   float _maxVelocity;
   float _acceleration;
   std::shared_ptr<Gameplay> _gameplay;
-  const boost::property_tree::ptree & _config;
+  boost::property_tree::ptree _config;
   EntityIdGenerator _entityIdGenerator;
   EntityId _paddleId;
   EntityId _ballId;
@@ -59,6 +60,8 @@ private:
   GraphicSubsystem _graphicSubsystem;
   PhysicSubsystem _physicSubsystem;
   SoundSubsystem _soundSubsystem;
+  
+  std::set<EntityId> _entitiesToDelete;
 };
 
 #endif
