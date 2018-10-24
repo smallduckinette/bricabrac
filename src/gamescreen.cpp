@@ -44,12 +44,15 @@ GameScreen::GameScreen(sf::RenderWindow * window,
 
 std::shared_ptr<Screen> GameScreen::onMouseMove(int x, int)
 {
-  _mouseX = x;
-  _physicSubsystem.moveObstacle(_paddleId, sf::Vector2f(x, 560));
-
-  if(_physicSubsystem.isStatic(_ballId))
+  if(_status == RUNNING)
   {
-    _physicSubsystem.moveDynamic(_ballId, sf::Vector2f(x, 540));
+    _mouseX = x;
+    _physicSubsystem.moveObstacle(_paddleId, sf::Vector2f(x, 560));
+    
+    if(_physicSubsystem.isStatic(_ballId))
+    {
+      _physicSubsystem.moveDynamic(_ballId, sf::Vector2f(x, 540));
+    }
   }
   
   return nullptr;
@@ -57,7 +60,7 @@ std::shared_ptr<Screen> GameScreen::onMouseMove(int x, int)
 
 std::shared_ptr<Screen> GameScreen::onMouseClick(sf::Mouse::Button, int, int)
 {
-  if(_physicSubsystem.isStatic(_ballId))
+  if(_status == RUNNING && _physicSubsystem.isStatic(_ballId))
   {
     _physicSubsystem.setDynamic(_ballId, normalize(sf::Vector2f(1, -1)) * _initialVelocity);
   }
@@ -86,12 +89,24 @@ std::shared_ptr<Screen> GameScreen::onFrame(sf::Time elapsed)
     _gameplay->success();
     return std::make_shared<GameScreen>(_window, _initialVelocity, _maxVelocity, _acceleration, _gameplay, _config);
   }
+  else if(_status == PAUSE && _pauseTime > elapsed)
+  {
+    // Paused
+    _pauseTime -= elapsed;
+  }
   else
+  {
+    _status = RUNNING;
+    elapsed -= _pauseTime;
+    _pauseTime = sf::seconds(0);
+  }
+  
+  if(_status == RUNNING && elapsed > sf::seconds(0))
   {
     // Status is RUNNING
     _physicSubsystem.simulate(elapsed);
-    return nullptr;
   }
+  return nullptr;
 }
 
 void GameScreen::draw()
@@ -113,6 +128,8 @@ void GameScreen::onMove(EntityId entityId, const sf::Vector2f & position)
     {
       _physicSubsystem.setStatic(_ballId);
       _physicSubsystem.moveDynamic(_ballId, sf::Vector2f(_mouseX, 540));
+      _status = PAUSE;
+      _pauseTime = sf::seconds(1);
     }
   }
 }

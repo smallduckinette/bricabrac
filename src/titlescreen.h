@@ -2,6 +2,7 @@
 #define __CHAPITRE5_TITLESCREEN_H__
 
 #include <boost/property_tree/ptree.hpp>
+#include <SFML/Audio.hpp>
 
 #include "guiscreen.h"
 
@@ -15,6 +16,7 @@ public:
 
 private:
   boost::property_tree::ptree _config;
+  sf::Music _music;
   
   int _easy;
   int _medium;

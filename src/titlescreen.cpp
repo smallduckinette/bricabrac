@@ -24,6 +24,11 @@ TitleScreen::TitleScreen(sf::RenderWindow * window):
   
   _hard = addButton("resources/button.png", 500, 220);
   addButton("resources/hard.png", 500, 220);
+  
+  if(_music.openFromFile("resources/bossa.ogg"))
+  {
+    _music.play();
+  }
 }
 
 std::shared_ptr<Screen> TitleScreen::onMouseClick(sf::Mouse::Button, int x, int y)

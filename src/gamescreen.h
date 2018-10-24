@@ -54,8 +54,10 @@ private:
     {
       RUNNING,
       FAIL,
-      SUCCESS
+      SUCCESS,
+      PAUSE
     } _status;
+  sf::Time _pauseTime;
   
   GraphicSubsystem _graphicSubsystem;
   PhysicSubsystem _physicSubsystem;
