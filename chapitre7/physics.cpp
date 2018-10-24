@@ -1,4 +1,7 @@
 #include "physics.h"
+
+#include <cmath>
+
 #include "collisiondata.h"
 
 
@@ -57,7 +60,7 @@ CollisionDataOpt physics::testSphereHit(const sf::Vector2f & centre,
   
   if(d >= 0)
   {
-    float delta = (-b - sqrt(d)) / (2 * a);
+    float delta = (-b - std::sqrt(d)) / (2 * a);
     if(delta >= 0 && delta <= velocity)
     {
       // New position

@@ -1,6 +1,6 @@
 CXX = g++
 CXXFLAGS = -ggdb -O0 -std=c++17 -W -Wall -Werror -pedantic
-LDFLAGS  = -fuse-ld=gold -lsfml-graphics -lsfml-window -lsfml-system -lsfml-audio -pthread
+LDFLAGS  = -fuse-ld=gold $(shell pkg-config sfml-graphics sfml-window sfml-system sfml-audio --libs) -pthread
 
 # Main binary
 TARGET      = main.app

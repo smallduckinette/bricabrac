@@ -1,5 +1,6 @@
 #include "physicsubsystem.h"
 
+#include <cmath>
 
 void PhysicSubsystem::addObstacle(EntityId entityId, const std::shared_ptr<Rectangle> & rectangle,
                                   bool round,
