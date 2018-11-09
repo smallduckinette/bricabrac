@@ -2,7 +2,6 @@
 
 #include <fstream>
 
-#include "lifes.h"
 #include "frame.h"
 #include "titlescreen.h"
 #include "gameplay.h"
@@ -15,7 +14,7 @@ GameScreen::GameScreen(sf::RenderWindow * window,
                        const std::shared_ptr<Gameplay> & gameplay,
                        const boost::property_tree::ptree & config):
   _window(window),
-  _lifes(std::make_shared<Lifes>(gameplay)),
+  _overlay(gameplay),
   _initialVelocity(initialVelocity),
   _maxVelocity(maxVelocity),
   _acceleration(acceleration),
@@ -99,6 +98,7 @@ std::shared_ptr<Screen> GameScreen::onFrame(sf::Time elapsed)
     _status = RUNNING;
     elapsed -= _pauseTime;
     _pauseTime = sf::seconds(0);
+    _overlay.clear();
   }
   
   if(_status == RUNNING && elapsed > sf::seconds(0))
@@ -110,10 +110,9 @@ std::shared_ptr<Screen> GameScreen::onFrame(sf::Time elapsed)
 }
 
 void GameScreen::draw()
-{
-  _window->draw(*_lifes);
-  
+{  
   _window->draw(_graphicSubsystem);
+  _window->draw(_overlay);
 }
 
 void GameScreen::onMove(EntityId entityId, const sf::Vector2f & position)
@@ -130,6 +129,7 @@ void GameScreen::onMove(EntityId entityId, const sf::Vector2f & position)
       _physicSubsystem.moveDynamic(_ballId, sf::Vector2f(_mouseX, 540));
       _status = PAUSE;
       _pauseTime = sf::seconds(1);
+      _overlay.onFailure();
     }
   }
 }

@@ -6,11 +6,11 @@
 #include "graphicsubsystem.h"
 #include "physicsubsystem.h"
 #include "soundsubsystem.h"
+#include "overlay.h"
 
 #include <boost/property_tree/ptree.hpp>
 
 class Item;
-class Lifes;
 class Gameplay;
 
 class GameScreen : public Screen,
@@ -39,7 +39,7 @@ private:
   sf::RenderWindow * _window;
   
   World _world;
-  std::shared_ptr<Lifes> _lifes;
+  Overlay _overlay;
   float _initialVelocity;
   float _maxVelocity;
   float _acceleration;

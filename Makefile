@@ -1,6 +1,6 @@
 CXX = g++
-CXXFLAGS = -ggdb -O0 -std=c++17 -W -Wall -Werror -pedantic
-LDFLAGS  = -fuse-ld=gold $(shell pkg-config sfml-graphics sfml-window sfml-system sfml-audio --libs) -pthread
+CXXFLAGS = -ggdb -O0 -std=c++17 -W -Wall -Werror -pedantic $(shell pkg-config sfml-graphics sfml-window sfml-system sfml-audio jsoncpp --cflags)
+LDFLAGS  = -fuse-ld=gold $(shell pkg-config sfml-graphics sfml-window sfml-system sfml-audio jsoncpp --libs) -pthread
 
 # Main binary
 TARGET      = bin/main.app
@@ -14,7 +14,7 @@ UTEST_OBJS = $(UTEST_SRCS:.cpp=.o)
 
 # Library
 LIB    = lib/libbab.a
-SRCS   = src/collisiondata.cpp src/frame.cpp src/gameplay.cpp src/gamescreen.cpp src/graphicsubsystem.cpp src/guiscreen.cpp src/leveldescription.cpp src/lifes.cpp src/physics.cpp src/physicsubsystem.cpp src/powerbrick.cpp src/screen.cpp src/soundsubsystem.cpp src/titlescreen.cpp src/vector.cpp src/world.cpp
+SRCS   = src/collisiondata.cpp src/frame.cpp src/gameplay.cpp src/gamescreen.cpp src/graphicsubsystem.cpp src/guiscreen.cpp src/leveldescription.cpp src/overlay.cpp src/physics.cpp src/physicsubsystem.cpp src/powerbrick.cpp src/screen.cpp src/soundsubsystem.cpp src/titlescreen.cpp src/vector.cpp src/world.cpp
 OBJS   = $(SRCS:.cpp=.o)
 
 # Dependencies
