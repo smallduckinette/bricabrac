@@ -21,8 +21,12 @@ public:
   void addObstacle(EntityId entityId,
                    const std::shared_ptr<Rectangle> & obstacle,
                    bool round,
-                   int resistance);
+                   int resistance,
+                   bool catchBonus);
   void addDynamic(EntityId entityId, const Disc & disc);
+  void addBonus(EntityId entityId,
+                const OutsideRectangle & shape,
+                float velocity);
   
   void moveObstacle(EntityId entityId, const sf::Vector2f & position);
   void moveDynamic(EntityId entityId, const sf::Vector2f & position);
@@ -44,6 +48,7 @@ private:
     std::shared_ptr<Rectangle> _shape;
     bool _round;
     int _resistance;
+    bool _catchBonus;
   };
   
   struct Dynamic
@@ -53,6 +58,12 @@ private:
     float _velocity;
     bool _static;
   };
+
+  struct Bonus
+  {
+    OutsideRectangle _shape;
+    float _velocity;
+  };
   
   Signal<EntityId, EntityId, sf::Vector2f> _collisionSignal;
   Signal<EntityId, sf::Vector2f> _moveSignal;
@@ -60,6 +71,7 @@ private:
   
   std::map<EntityId, Obstacle> _obstacles;
   std::map<EntityId, Dynamic> _dynamics;
+  std::map<EntityId, Bonus> _bonus;
 };
 
 #endif

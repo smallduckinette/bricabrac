@@ -174,6 +174,11 @@ CollisionDataOpt OutsideRectangle::testHit(const Disc & disc,
   return cd;
 }
 
+bool OutsideRectangle::testHit(const OutsideRectangle & ) const
+{
+  return false;
+}
+
 CollisionDataOpt InsideRectangle::testHit(const Disc & disc,
                                           const sf::Vector2f & direction,
                                           float velocity) const
@@ -201,4 +206,9 @@ CollisionDataOpt InsideRectangle::testHit(const Disc & disc,
   }
   
   return cd;
+}
+
+bool InsideRectangle::testHit(const OutsideRectangle & ) const
+{
+  return false;
 }

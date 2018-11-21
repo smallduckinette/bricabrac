@@ -33,6 +33,8 @@ public:
   float _radius;
 };
 
+class OutsideRectangle;
+
 class Rectangle
 {
 public:
@@ -43,6 +45,7 @@ public:
   virtual CollisionDataOpt testHit(const Disc & disc,
                                    const sf::Vector2f & direction,
                                    float velocity) const = 0;
+  virtual bool testHit(const OutsideRectangle & rectangle) const = 0;
   
   /// Move the center of the rectangle to the new position
   void setPosition(const sf::Vector2f & position);
@@ -69,15 +72,17 @@ public:
   CollisionDataOpt testHit(const Disc & disc,
                            const sf::Vector2f & direction,
                            float velocity) const override;
+  bool testHit(const OutsideRectangle & rectangle) const override;
 };
 
 class InsideRectangle : public Rectangle
 {
   using Rectangle::Rectangle;
-
+  
   CollisionDataOpt testHit(const Disc & disc,
                            const sf::Vector2f & direction,
                            float velocity) const override;
+  bool testHit(const OutsideRectangle & rectangle) const override;
 };
 
 #endif

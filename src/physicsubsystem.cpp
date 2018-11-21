@@ -4,14 +4,22 @@
 
 void PhysicSubsystem::addObstacle(EntityId entityId, const std::shared_ptr<Rectangle> & rectangle,
                                   bool round,
-                                  int resistance)
+                                  int resistance,
+                                  bool catchBonus)
 {
-  _obstacles.insert({entityId, Obstacle{rectangle, round, resistance}});
+  _obstacles.insert({entityId, Obstacle{rectangle, round, resistance, catchBonus}});
 }
 
 void PhysicSubsystem::addDynamic(EntityId entityId, const Disc & disc)
 {
   _dynamics.insert({entityId, Dynamic{disc, sf::Vector2f(0, 0), 0, true}});
+}
+
+void PhysicSubsystem::addBonus(EntityId entityId,
+                               const OutsideRectangle & shape,
+                               float velocity)
+{
+  _bonus.insert({entityId, Bonus{shape, velocity}});
 }
 
 Signal<EntityId, EntityId, sf::Vector2f> & PhysicSubsystem::onCollision()
@@ -31,9 +39,6 @@ Signal<EntityId> & PhysicSubsystem::onDestroy()
 
 void PhysicSubsystem::simulate(sf::Time elapsed)
 {
-  std::vector<std::pair<EntityId, EntityId> > collisions;
-  std::vector<std::pair<EntityId, sf::Vector2f> > changeOfPositions;
-  
   for(auto && dynamic : _dynamics)
   {
     if(!dynamic.second._static && dynamic.second._velocity > 0)
@@ -99,6 +104,19 @@ void PhysicSubsystem::simulate(sf::Time elapsed)
           // Send change of position signal
           _moveSignal.emit(dynamic.first, dynamic.second._shape._position);
         }
+      }
+    }
+  }
+
+  for(auto && bonus : _bonus)
+  {
+    for(auto && obstacle : _obstacles)
+    {
+      if(obstacle.second._catchBonus && obstacle.second._shape->testHit(bonus.second._shape))
+      {
+        _collisionSignal.emit(bonus.first, obstacle.second._catchBonus, sf::Vector2f());
+        _destroySignal.emit(bonus.first);
+        _bonus.erase(bonus.first);
       }
     }
   }

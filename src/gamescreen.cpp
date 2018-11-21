@@ -171,7 +171,8 @@ void GameScreen::makeLevel()
                                                    std::make_shared<OutsideRectangle>(position,
                                                                                       position + sf::Vector2f(50, 30)),
                                                    false,
-                                                   brickType == 5 ? 3 : 1);
+                                                   brickType == 5 ? 3 : 1,
+                                                   false);
                       _soundSubsystem.add(entityId,
                                           SoundSubsystem::Brick);
                     }
@@ -186,7 +187,8 @@ void GameScreen::makeLevel()
                                std::make_shared<InsideRectangle>(sf::Vector2f(0, 0),
                                                                  sf::Vector2f(800, 1000)),
                                false,
-                               0);
+                               0,
+                               false);
   _soundSubsystem.add(wallId, SoundSubsystem::Wall);
   
   // Add ball
@@ -210,7 +212,8 @@ void GameScreen::makeLevel()
                                std::make_shared<OutsideRectangle>(paddlePosition + sf::Vector2f(-30, -10),
                                                                   paddlePosition + sf::Vector2f(30, 10)),
                                true,
-                               0);
+                               0,
+                               true);
   _soundSubsystem.add(_paddleId, SoundSubsystem::Paddle);
   
   onMouseMove(_mouseX, 0);
