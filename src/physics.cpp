@@ -174,9 +174,10 @@ CollisionDataOpt OutsideRectangle::testHit(const Disc & disc,
   return cd;
 }
 
-bool OutsideRectangle::testHit(const OutsideRectangle & ) const
+bool OutsideRectangle::testHit(const OutsideRectangle & rectangle) const
 {
-  return false;
+  return (rectangle._min.x <= _max.x && rectangle._max.x >= _min.x &&
+          rectangle._min.y <= _max.y && rectangle._max.y >= _min.y);
 }
 
 CollisionDataOpt InsideRectangle::testHit(const Disc & disc,

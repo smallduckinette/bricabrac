@@ -118,4 +118,58 @@ BOOST_AUTO_TEST_CASE(testRectangleCollisionsComplexCorners)
                     c1);    
 }
 
+BOOST_AUTO_TEST_CASE(testRectangleVsRectangleCollisionsHit)
+{
+  OutsideRectangle r(sf::Vector2f(0, 0), sf::Vector2f(5, 3));
+  
+  // With self
+  BOOST_CHECK(r.testHit(r));
+  
+  // Fully inside
+  BOOST_CHECK(r.testHit(OutsideRectangle(sf::Vector2f(1, 1), sf::Vector2f(4, 2))));
+
+  // Fully outside
+  BOOST_CHECK(r.testHit(OutsideRectangle(sf::Vector2f(-1, -1), sf::Vector2f(6, 4))));
+
+  // Lower but larger
+  BOOST_CHECK(r.testHit(OutsideRectangle(sf::Vector2f(-1, 1), sf::Vector2f(6, 2))));
+
+  // Higher but narrower
+  BOOST_CHECK(r.testHit(OutsideRectangle(sf::Vector2f(1, -1), sf::Vector2f(4, 4))));
+}
+
+BOOST_AUTO_TEST_CASE(testRectangleVsRectangleCollisions)
+{
+  OutsideRectangle r(sf::Vector2f(0, 0), sf::Vector2f(5, 3));
+  
+  // Higher
+  BOOST_CHECK(!r.testHit(OutsideRectangle(sf::Vector2f(2, 6), sf::Vector2f(3, 8))));
+
+  // Lower
+  BOOST_CHECK(!r.testHit(OutsideRectangle(sf::Vector2f(2, -3), sf::Vector2f(3, -1))));
+
+  // Left
+  BOOST_CHECK(!r.testHit(OutsideRectangle(sf::Vector2f(-3, 0), sf::Vector2f(-1, 3))));
+  
+  // Right
+  BOOST_CHECK(!r.testHit(OutsideRectangle(sf::Vector2f(7, 0), sf::Vector2f(9, 3))));
+}
+
+BOOST_AUTO_TEST_CASE(testRectangleVsRectangleBoundaries)
+{
+  OutsideRectangle r(sf::Vector2f(0, 0), sf::Vector2f(5, 3));
+  
+  // Just higher
+  BOOST_CHECK(r.testHit(OutsideRectangle(sf::Vector2f(2, 3), sf::Vector2f(3, 8))));
+
+  // Just lower
+  BOOST_CHECK(r.testHit(OutsideRectangle(sf::Vector2f(2, -3), sf::Vector2f(3, 0))));
+
+  // Just left
+  BOOST_CHECK(r.testHit(OutsideRectangle(sf::Vector2f(-3, 0), sf::Vector2f(0, 3))));
+  
+  // Just right
+  BOOST_CHECK(r.testHit(OutsideRectangle(sf::Vector2f(5, 0), sf::Vector2f(9, 3))));  
+}
+
 BOOST_AUTO_TEST_SUITE_END()

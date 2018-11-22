@@ -4,13 +4,25 @@
 
 #include <iostream>
 #include <memory>
+#include <fstream>
 
+#include "entitydictionary.h"
 #include "titlescreen.h"
 
 int main()
 {
   try
   {
+    try
+    {
+      auto entityDictionaryData = data::EntityDictionary_("resources/entitydictionary.xml");
+    }
+    catch(const xml_schema::Exception & e)
+    {
+      std::cout << e << std::endl;
+      throw;
+    }
+    
     sf::RenderWindow window(sf::VideoMode(800, 600), "BricABrac");
     window.setVerticalSyncEnabled(true);
     

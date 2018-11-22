@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+  <xs:complexType name="Entity">
+    <xs:attribute name="type" type="xs:string" use="required"/>
+  </xs:complexType>
+  
+  <xs:complexType name="EntityDictionary">
+    <xs:sequence>
+      <xs:element name="Entity" type="Entity" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:element name="EntityDictionary" type="EntityDictionary"/>
+
+</xs:schema>

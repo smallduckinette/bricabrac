@@ -188,7 +188,7 @@ void GameScreen::makeLevel()
                                                                  sf::Vector2f(800, 1000)),
                                false,
                                0,
-                               false);
+                               true);
   _soundSubsystem.add(wallId, SoundSubsystem::Wall);
   
   // Add ball
